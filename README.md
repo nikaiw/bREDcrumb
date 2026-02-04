@@ -103,11 +103,66 @@ bredcrumb show <id-or-value>
 bredcrumb list --json
 ```
 
-## CI Integration
+## Build Integration
 
 Integrate bREDcrumb into your build pipeline to automatically tag all your tools.
 
-### GitHub Actions
+### Makefile
+
+```makefile
+BREADCRUMB ?= YOURTEAM_$(shell git rev-parse --short HEAD)
+
+build:
+	$(CC) -o implant main.c
+
+release: build
+	bredcrumb patch ./implant "$(BREADCRUMB)" -s overlay
+	bredcrumb yara "$(BREADCRUMB)" --ascii --wide -o implant.yar
+
+clean:
+	rm -f implant implant.yar
+```
+
+### Rust (Cargo)
+
+Add a post-build script in your `Cargo.toml`:
+
+```toml
+[package.metadata.scripts]
+post-build = "bredcrumb patch ./target/release/implant $BREADCRUMB -s overlay"
+```
+
+Or use a simple wrapper script `build.sh`:
+
+```bash
+#!/bin/bash
+BREADCRUMB="YOURTEAM_$(git rev-parse --short HEAD)"
+cargo build --release
+bredcrumb patch ./target/release/implant "$BREADCRUMB" -s overlay
+bredcrumb yara "$BREADCRUMB" --ascii --wide -o implant.yar
+```
+
+### Go
+
+```bash
+#!/bin/bash
+BREADCRUMB="YOURTEAM_$(git rev-parse --short HEAD)"
+go build -o implant .
+bredcrumb patch ./implant "$BREADCRUMB" -s overlay
+```
+
+### CMake
+
+```cmake
+add_custom_command(TARGET implant POST_BUILD
+    COMMAND bredcrumb patch $<TARGET_FILE:implant> "${BREADCRUMB}" -s overlay
+    COMMENT "Injecting breadcrumb..."
+)
+```
+
+### CI/CD
+
+#### GitHub Actions
 
 ```yaml
 name: Build with Breadcrumb
@@ -144,7 +199,7 @@ jobs:
             breadcrumb.yar
 ```
 
-### GitLab CI
+#### GitLab CI
 
 ```yaml
 build:
