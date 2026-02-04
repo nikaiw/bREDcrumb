@@ -103,6 +103,72 @@ bredcrumb show <id-or-value>
 bredcrumb list --json
 ```
 
+## CI Integration
+
+Integrate bREDcrumb into your build pipeline to automatically tag all your tools.
+
+### GitHub Actions
+
+```yaml
+name: Build with Breadcrumb
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build your tool
+        run: make release
+
+      - name: Install bREDcrumb
+        run: cargo install --git https://github.com/nikaiw/bREDcrumb.git
+
+      - name: Inject breadcrumb
+        run: |
+          BREADCRUMB="YOURTEAM_${GITHUB_SHA::8}"
+          bredcrumb patch ./build/implant "$BREADCRUMB" -s overlay
+          bredcrumb yara "$BREADCRUMB" --ascii --wide -o breadcrumb.yar
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release
+          path: |
+            ./build/implant
+            breadcrumb.yar
+```
+
+### GitLab CI
+
+```yaml
+build:
+  stage: build
+  image: rust:latest
+  script:
+    - make release
+    - cargo install --git https://github.com/nikaiw/bREDcrumb.git
+    - BREADCRUMB="YOURTEAM_${CI_COMMIT_SHORT_SHA}"
+    - bredcrumb patch ./build/implant "$BREADCRUMB" -s overlay
+    - bredcrumb yara "$BREADCRUMB" --ascii --wide -o breadcrumb.yar
+  artifacts:
+    paths:
+      - ./build/implant
+      - breadcrumb.yar
+```
+
+### Tips
+
+- Use commit SHA in breadcrumb for traceability: `TEAM_${COMMIT_SHA::8}`
+- Store YARA rules as build artifacts for blue team handoff
+- Use `overlay` strategy for simplicity, `cave` for stealth
+- Tag builds with campaign name: `--tag "operation-name"`
+
 ## CLI Reference
 
 ```
