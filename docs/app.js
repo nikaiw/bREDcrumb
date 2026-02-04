@@ -197,7 +197,7 @@ public class TrackingString {
 // Event handlers
 document.getElementById('btn-generate').addEventListener('click', () => {
     const length = parseInt(document.getElementById('gen-length').value) || 16;
-    const prefix = document.getElementById('gen-prefix').value || 'RT';
+    const prefix = document.getElementById('gen-prefix').value;
 
     let result;
     try {
