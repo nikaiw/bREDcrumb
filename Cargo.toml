@@ -1,0 +1,43 @@
+[package]
+name = "redbreadcrumb"
+version = "0.1.0"
+edition = "2021"
+authors = ["Red Team"]
+description = "CLI tool for generating tracking strings, YARA rules, code snippets, and patching binaries"
+license = "MIT"
+repository = "https://github.com/nikaiw/redbreadcrumb"
+
+[[bin]]
+name = "redbreadcrumb"
+path = "src/main.rs"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+# Core dependencies (always included)
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+goblin = "0.8"
+rand = "0.8"
+uuid = { version = "1", features = ["v4", "serde", "js"] }
+chrono = { version = "0.4", features = ["serde"] }
+thiserror = "1"
+hex = "0.4"
+
+# CLI-only dependencies (not needed for WASM)
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+clap = { version = "4", features = ["derive"] }
+dirs = "5"
+
+# WASM-only dependencies
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2"
+getrandom = { version = "0.2", features = ["js"] }
+
+[dev-dependencies]
+tempfile = "3"
+
+[profile.release]
+opt-level = 3
+lto = true
