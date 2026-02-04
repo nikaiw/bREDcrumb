@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RedBreadcrumb - Binary Tracking String Toolkit</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">RedBreadcrumb</a>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#install">Install</a></li>
+                <li><a href="#usage">Usage</a></li>
+                <li><a href="#demo">Demo</a></li>
+                <li><a href="https://github.com/nikaiw/redbreadcrumb" class="btn-github">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <h1>RedBreadcrumb</h1>
+            <p class="tagline">Generate, inject, and track unique strings in compiled binaries</p>
+            <div class="hero-buttons">
+                <a href="#install" class="btn btn-primary">Get Started</a>
+                <a href="#demo" class="btn btn-secondary">Try Demo</a>
+            </div>
+        </div>
+    </header>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2>Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">&#128273;</div>
+                    <h3>String Generation</h3>
+                    <p>Generate unique tracking strings with custom prefixes, or use your own custom strings for attribution.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#128190;</div>
+                    <h3>Binary Patching</h3>
+                    <p>Inject strings into PE, ELF, and Mach-O binaries using multiple strategies: cave, section, extend, or overlay.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#128269;</div>
+                    <h3>YARA Rules</h3>
+                    <p>Auto-generate YARA detection rules for your tracking strings with ASCII, wide, and hex patterns.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#128187;</div>
+                    <h3>Code Snippets</h3>
+                    <p>Generate code in 9 languages: C, C++, Rust, Go, Python, C#, JavaScript, PowerShell, Java.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#127760;</div>
+                    <h3>WebAssembly</h3>
+                    <p>Use directly in the browser with full WASM support - no server required.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">&#128202;</div>
+                    <h3>Tracking Database</h3>
+                    <p>Keep track of all generated strings, tags, and patched binaries in a local JSON database.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="formats" class="formats">
+        <div class="container">
+            <h2>Supported Formats &amp; Strategies</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Format</th>
+                            <th>Cave</th>
+                            <th>Section</th>
+                            <th>Extend</th>
+                            <th>Overlay</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>ELF (Linux)</td>
+                            <td class="yes">&#10003;</td>
+                            <td class="yes">&#10003;</td>
+                            <td class="yes">&#10003;</td>
+                            <td class="yes">&#10003;</td>
+                        </tr>
+                        <tr>
+                            <td>PE (Windows)</td>
+                            <td class="yes">&#10003;</td>
+                            <td class="yes">&#10003;</td>
+                            <td class="yes">&#10003;</td>
+                            <td class="yes">&#10003;</td>
+                        </tr>
+                        <tr>
+                            <td>Mach-O (macOS)</td>
+                            <td class="yes">&#10003;</td>
+                            <td class="yes">&#10003;</td>
+                            <td class="yes">&#10003;</td>
+                            <td class="yes">&#10003;</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="install" class="install">
+        <div class="container">
+            <h2>Installation</h2>
+            <div class="install-options">
+                <div class="install-option">
+                    <h3>From Source (Cargo)</h3>
+                    <pre><code>git clone https://github.com/nikaiw/redbreadcrumb
+cd redbreadcrumb
+cargo build --release
+./target/release/redbreadcrumb --help</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="usage" class="usage">
+        <div class="container">
+            <h2>Usage Examples</h2>
+
+            <div class="usage-block">
+                <h3>Generate a Tracking String</h3>
+                <pre><code><span class="prompt">$</span> redbreadcrumb generate -l 16 -t "operation-alpha"
+RT8AfENUlAMN3hPk
+
+<span class="prompt">$</span> redbreadcrumb generate --custom "MY_CUSTOM_MARKER" -t "op-beta"
+MY_CUSTOM_MARKER</code></pre>
+            </div>
+
+            <div class="usage-block">
+                <h3>Patch a Binary</h3>
+                <pre><code><span class="prompt">$</span> redbreadcrumb patch ./implant.exe "RT8AfENUlAMN3hPk" -s cave
+Successfully patched binary!
+  Format: PE64
+  Strategy: cave (.rdata)
+  Virtual Address: 0x140008AB0
+  File Offset: 0x6EB0
+  Output: ./implant_patched.exe
+
+<span class="prompt">$</span> redbreadcrumb patch ./beacon -s overlay -o ./beacon_tracked
+Successfully patched binary!
+  Format: ELF64
+  Strategy: overlay
+  File Offset: 0x22BE8</code></pre>
+            </div>
+
+            <div class="usage-block">
+                <h3>Generate YARA Rule</h3>
+                <pre><code><span class="prompt">$</span> redbreadcrumb yara "RT8AfENUlAMN3hPk" --ascii --wide
+rule tracking_string_RT8AfENU {
+    meta:
+        description = "Detects tracking string: RT8AfENUlAMN3hPk"
+        author = "redbreadcrumb"
+
+    strings:
+        $tracking_string = "RT8AfENUlAMN3hPk" ascii wide
+        $tracking_hex = { 52 54 38 41 66 45 4E 55 ... }
+
+    condition:
+        any of them
+}</code></pre>
+            </div>
+
+            <div class="usage-block">
+                <h3>Generate Code Snippets</h3>
+                <pre><code><span class="prompt">$</span> redbreadcrumb code "MARKER" -l python
+# Tracking string: MARKER
+TRACKING_STRING = "MARKER"
+TRACKING_STRING_LEN = 6
+
+<span class="prompt">$</span> redbreadcrumb code "MARKER" -l rust
+// Tracking string: MARKER
+const TRACKING_STRING: &str = "MARKER";
+const TRACKING_STRING_LEN: usize = 6;</code></pre>
+            </div>
+
+            <div class="usage-block">
+                <h3>List Tracked Strings</h3>
+                <pre><code><span class="prompt">$</span> redbreadcrumb list
+ID                                    Value             Created               Tags
+------------------------------------------------------------------------------------------
+24ba2d8f-121b-488a-b6d9-84267c61ba42  RT8AfENUlAMN3hPk  2026-02-03 08:58      operation-alpha
+ac288ebe-a192-4481-a03b-147a2e1f59ce  MY_CUSTOM_MARKER  2026-02-03 10:48      op-beta</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <section id="demo" class="demo">
+        <div class="container">
+            <h2>Interactive Demo</h2>
+            <p class="demo-subtitle">Try RedBreadcrumb directly in your browser using WebAssembly</p>
+
+            <div class="demo-container">
+                <div class="demo-panel">
+                    <h3>String Generator</h3>
+                    <div class="form-group">
+                        <label for="gen-length">Length:</label>
+                        <input type="number" id="gen-length" value="16" min="4" max="64">
+                    </div>
+                    <div class="form-group">
+                        <label for="gen-prefix">Prefix:</label>
+                        <input type="text" id="gen-prefix" value="RT" maxlength="8">
+                    </div>
+                    <button id="btn-generate" class="btn btn-primary">Generate</button>
+                    <div class="output" id="gen-output"></div>
+                </div>
+
+                <div class="demo-panel">
+                    <h3>Code Generator</h3>
+                    <div class="form-group">
+                        <label for="code-string">String:</label>
+                        <input type="text" id="code-string" placeholder="Enter tracking string">
+                    </div>
+                    <div class="form-group">
+                        <label for="code-lang">Language:</label>
+                        <select id="code-lang">
+                            <option value="rust">Rust</option>
+                            <option value="python">Python</option>
+                            <option value="c">C</option>
+                            <option value="go">Go</option>
+                            <option value="csharp">C#</option>
+                            <option value="javascript">JavaScript</option>
+                            <option value="powershell">PowerShell</option>
+                            <option value="java">Java</option>
+                        </select>
+                    </div>
+                    <button id="btn-code" class="btn btn-primary">Generate Code</button>
+                    <pre class="output" id="code-output"></pre>
+                </div>
+
+                <div class="demo-panel">
+                    <h3>YARA Generator</h3>
+                    <div class="form-group">
+                        <label for="yara-string">String:</label>
+                        <input type="text" id="yara-string" placeholder="Enter tracking string">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="yara-ascii" checked> ASCII
+                        </label>
+                        <label>
+                            <input type="checkbox" id="yara-wide"> Wide
+                        </label>
+                    </div>
+                    <button id="btn-yara" class="btn btn-primary">Generate YARA</button>
+                    <pre class="output" id="yara-output"></pre>
+                </div>
+
+                <div class="demo-panel demo-panel-wide">
+                    <h3>Binary Patcher</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="patch-file">Binary File:</label>
+                            <input type="file" id="patch-file" accept=".exe,.dll,.so,.dylib,.macho,*">
+                        </div>
+                        <div class="form-group">
+                            <label for="patch-string">Tracking String:</label>
+                            <input type="text" id="patch-string" placeholder="Enter tracking string">
+                        </div>
+                        <div class="form-group">
+                            <label for="patch-strategy">Strategy:</label>
+                            <select id="patch-strategy">
+                                <option value="cave">Cave (use slack space)</option>
+                                <option value="section">Section (add new section)</option>
+                                <option value="extend">Extend (extend last section)</option>
+                                <option value="overlay">Overlay (append after EOF)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="btn-patch" class="btn btn-primary">Patch Binary</button>
+                    <div class="output" id="patch-output"></div>
+                </div>
+            </div>
+
+            <div id="wasm-loading" class="wasm-status">Loading WebAssembly module...</div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>RedBreadcrumb - A binary tracking toolkit for security professionals</p>
+            <p class="disclaimer">For authorized security testing and research only.</p>
+        </div>
+    </footer>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
