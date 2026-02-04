@@ -16,7 +16,6 @@ impl CodeGenerator for GoCodeGenerator {
         )
         .unwrap();
         writeln!(code).unwrap();
-        writeln!(code, "//go:noinline").unwrap();
         writeln!(
             code,
             "var trackingString = \"{}\"",
@@ -24,9 +23,20 @@ impl CodeGenerator for GoCodeGenerator {
         )
         .unwrap();
         writeln!(code).unwrap();
-        writeln!(code, "// init() ensures the string is kept in the binary").unwrap();
+        writeln!(
+            code,
+            "// getTrackingString prevents the compiler from optimizing away the string"
+        )
+        .unwrap();
+        writeln!(code, "//").unwrap();
+        writeln!(code, "//go:noinline").unwrap();
+        writeln!(code, "func getTrackingString() string {{").unwrap();
+        writeln!(code, "\treturn trackingString").unwrap();
+        writeln!(code, "}}").unwrap();
+        writeln!(code).unwrap();
+        writeln!(code, "// init ensures the string is kept in the binary").unwrap();
         writeln!(code, "func init() {{").unwrap();
-        writeln!(code, "\t_ = trackingString").unwrap();
+        writeln!(code, "\t_ = getTrackingString()").unwrap();
         writeln!(code, "}}").unwrap();
 
         code

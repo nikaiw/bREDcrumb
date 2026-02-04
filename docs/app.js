@@ -121,12 +121,18 @@ fn _tracking_init() {
 // Tracking string - DO NOT REMOVE
 // This string is used for binary attribution/tracking
 
-//go:noinline
 var trackingString = "${str}"
 
-// init() ensures the string is kept in the binary
+// getTrackingString prevents the compiler from optimizing away the string
+//
+//go:noinline
+func getTrackingString() string {
+	return trackingString
+}
+
+// init ensures the string is kept in the binary
 func init() {
-	_ = trackingString
+	_ = getTrackingString()
 }`,
             csharp: `// Tracking string - DO NOT REMOVE
 // This string is used for binary attribution/tracking
