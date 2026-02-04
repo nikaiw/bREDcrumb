@@ -9,8 +9,18 @@ impl CodeGenerator for JavaCodeGenerator {
 
         writeln!(code, "// Tracking string: {}", string).unwrap();
         writeln!(code, "public class TrackingString {{").unwrap();
-        writeln!(code, "    public static final String TRACKING_STRING = \"{}\";", escape_java_string(string)).unwrap();
-        writeln!(code, "    public static final int TRACKING_STRING_LEN = {};", string.len()).unwrap();
+        writeln!(
+            code,
+            "    public static final String TRACKING_STRING = \"{}\";",
+            escape_java_string(string)
+        )
+        .unwrap();
+        writeln!(
+            code,
+            "    public static final int TRACKING_STRING_LEN = {};",
+            string.len()
+        )
+        .unwrap();
         writeln!(code, "}}").unwrap();
 
         code

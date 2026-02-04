@@ -10,7 +10,12 @@ impl CodeGenerator for CSharpCodeGenerator {
         writeln!(code, "// Tracking string: {}", string).unwrap();
         writeln!(code, "public static class TrackingString").unwrap();
         writeln!(code, "{{").unwrap();
-        writeln!(code, "    public const string Value = \"{}\";", escape_csharp_string(string)).unwrap();
+        writeln!(
+            code,
+            "    public const string Value = \"{}\";",
+            escape_csharp_string(string)
+        )
+        .unwrap();
         writeln!(code, "    public const int Length = {};", string.len()).unwrap();
         writeln!(code, "}}").unwrap();
 

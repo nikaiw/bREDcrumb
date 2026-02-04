@@ -8,7 +8,12 @@ impl CodeGenerator for PythonCodeGenerator {
         let mut code = String::new();
 
         writeln!(code, "# Tracking string: {}", string).unwrap();
-        writeln!(code, "TRACKING_STRING = \"{}\"", escape_python_string(string)).unwrap();
+        writeln!(
+            code,
+            "TRACKING_STRING = \"{}\"",
+            escape_python_string(string)
+        )
+        .unwrap();
         writeln!(code, "TRACKING_STRING_LEN = {}", string.len()).unwrap();
 
         code

@@ -14,9 +14,8 @@ pub mod wasm;
 pub use cli::{Cli, Commands, Language, PatchStrategy};
 
 pub use codegen::{
-    CCodeGenerator, CSharpCodeGenerator, CodeGenerator, GoCodeGenerator,
-    JavaCodeGenerator, JavaScriptCodeGenerator, PowerShellCodeGenerator, PythonCodeGenerator,
-    RustCodeGenerator,
+    CCodeGenerator, CSharpCodeGenerator, CodeGenerator, GoCodeGenerator, JavaCodeGenerator,
+    JavaScriptCodeGenerator, PowerShellCodeGenerator, PythonCodeGenerator, RustCodeGenerator,
 };
 pub use generator::StringGenerator;
 pub use patcher::BinaryPatcher;

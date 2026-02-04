@@ -116,8 +116,7 @@ fn patch_elf_section(
     let last_load_segment = elf
         .program_headers
         .iter()
-        .filter(|ph| ph.p_type == goblin::elf::program_header::PT_LOAD)
-        .last()
+        .rfind(|ph| ph.p_type == goblin::elf::program_header::PT_LOAD)
         .ok_or(PatchError::PatchFailed("No LOAD segment found".to_string()))?;
 
     let segment_end = last_load_segment.p_offset + last_load_segment.p_filesz;
@@ -194,8 +193,7 @@ fn patch_elf_extend(
     let last_load = elf
         .program_headers
         .iter()
-        .filter(|ph| ph.p_type == goblin::elf::program_header::PT_LOAD)
-        .last();
+        .rfind(|ph| ph.p_type == goblin::elf::program_header::PT_LOAD);
 
     let write_offset = patched.len();
 

@@ -8,11 +8,20 @@ impl CodeGenerator for JavaScriptCodeGenerator {
         let mut code = String::new();
 
         writeln!(code, "// Tracking string: {}", string).unwrap();
-        writeln!(code, "const TRACKING_STRING = \"{}\";", escape_js_string(string)).unwrap();
+        writeln!(
+            code,
+            "const TRACKING_STRING = \"{}\";",
+            escape_js_string(string)
+        )
+        .unwrap();
         writeln!(code, "const TRACKING_STRING_LEN = {};", string.len()).unwrap();
         writeln!(code).unwrap();
         writeln!(code, "// For ES6 modules:").unwrap();
-        writeln!(code, "// export {{ TRACKING_STRING, TRACKING_STRING_LEN }};").unwrap();
+        writeln!(
+            code,
+            "// export {{ TRACKING_STRING, TRACKING_STRING_LEN }};"
+        )
+        .unwrap();
 
         code
     }

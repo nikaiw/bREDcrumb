@@ -80,9 +80,10 @@ impl Storage {
     pub fn find_by_id(&self, id: &str) -> Result<Option<TrackedString>, StorageError> {
         let db = self.load()?;
         let uuid = uuid::Uuid::parse_str(id).ok();
-        Ok(db.strings.into_iter().find(|s| {
-            uuid.map(|u| s.id == u).unwrap_or(false) || s.value == id
-        }))
+        Ok(db
+            .strings
+            .into_iter()
+            .find(|s| uuid.map(|u| s.id == u).unwrap_or(false) || s.value == id))
     }
 
     pub fn update_string(&self, tracked: TrackedString) -> Result<(), StorageError> {

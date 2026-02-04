@@ -13,16 +13,26 @@ pub struct YaraOptions {
 impl YaraGenerator {
     pub fn generate(string: &str, rule_name: Option<&str>, options: &YaraOptions) -> String {
         let sanitized_name = rule_name
-            .map(|s| Self::sanitize_rule_name(s))
+            .map(Self::sanitize_rule_name)
             .unwrap_or_else(|| Self::generate_rule_name(string));
 
         let mut rule = String::new();
 
         writeln!(rule, "rule {} {{", sanitized_name).unwrap();
         writeln!(rule, "    meta:").unwrap();
-        writeln!(rule, "        description = \"Detects tracking string: {}\"", string).unwrap();
+        writeln!(
+            rule,
+            "        description = \"Detects tracking string: {}\"",
+            string
+        )
+        .unwrap();
         writeln!(rule, "        author = \"redteamstrings\"").unwrap();
-        writeln!(rule, "        date = \"{}\"", chrono::Utc::now().format("%Y-%m-%d")).unwrap();
+        writeln!(
+            rule,
+            "        date = \"{}\"",
+            chrono::Utc::now().format("%Y-%m-%d")
+        )
+        .unwrap();
         writeln!(rule).unwrap();
         writeln!(rule, "    strings:").unwrap();
 
@@ -46,15 +56,21 @@ impl YaraGenerator {
             format!(" {}", modifiers.join(" "))
         };
 
-        writeln!(rule, "        $tracking_string = \"{}\"{}",
+        writeln!(
+            rule,
+            "        $tracking_string = \"{}\"{}",
             Self::escape_string(string),
             modifier_str
-        ).unwrap();
+        )
+        .unwrap();
 
         // Also add hex representation
-        writeln!(rule, "        $tracking_hex = {{ {} }}",
+        writeln!(
+            rule,
+            "        $tracking_hex = {{ {} }}",
             Self::to_hex_pattern(string)
-        ).unwrap();
+        )
+        .unwrap();
 
         writeln!(rule).unwrap();
         writeln!(rule, "    condition:").unwrap();
@@ -66,18 +82,28 @@ impl YaraGenerator {
 
     pub fn generate_hex_only(string: &str, rule_name: Option<&str>) -> String {
         let sanitized_name = rule_name
-            .map(|s| Self::sanitize_rule_name(s))
+            .map(Self::sanitize_rule_name)
             .unwrap_or_else(|| Self::generate_rule_name(string));
 
         let mut rule = String::new();
 
         writeln!(rule, "rule {} {{", sanitized_name).unwrap();
         writeln!(rule, "    meta:").unwrap();
-        writeln!(rule, "        description = \"Detects tracking string (hex): {}\"", string).unwrap();
+        writeln!(
+            rule,
+            "        description = \"Detects tracking string (hex): {}\"",
+            string
+        )
+        .unwrap();
         writeln!(rule, "        author = \"redteamstrings\"").unwrap();
         writeln!(rule).unwrap();
         writeln!(rule, "    strings:").unwrap();
-        writeln!(rule, "        $hex = {{ {} }}", Self::to_hex_pattern(string)).unwrap();
+        writeln!(
+            rule,
+            "        $hex = {{ {} }}",
+            Self::to_hex_pattern(string)
+        )
+        .unwrap();
         writeln!(rule).unwrap();
         writeln!(rule, "    condition:").unwrap();
         writeln!(rule, "        $hex").unwrap();
@@ -89,10 +115,21 @@ impl YaraGenerator {
     fn sanitize_rule_name(name: &str) -> String {
         let sanitized: String = name
             .chars()
-            .map(|c| if c.is_alphanumeric() || c == '_' { c } else { '_' })
+            .map(|c| {
+                if c.is_alphanumeric() || c == '_' {
+                    c
+                } else {
+                    '_'
+                }
+            })
             .collect();
 
-        if sanitized.chars().next().map(|c| c.is_numeric()).unwrap_or(true) {
+        if sanitized
+            .chars()
+            .next()
+            .map(|c| c.is_numeric())
+            .unwrap_or(true)
+        {
             format!("rule_{}", sanitized)
         } else {
             sanitized

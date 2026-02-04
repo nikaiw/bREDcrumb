@@ -7,9 +7,8 @@
 use wasm_bindgen::prelude::*;
 
 use crate::codegen::{
-    CCodeGenerator, CSharpCodeGenerator, CodeGenerator, GoCodeGenerator,
-    JavaCodeGenerator, JavaScriptCodeGenerator, PowerShellCodeGenerator, PythonCodeGenerator,
-    RustCodeGenerator,
+    CCodeGenerator, CSharpCodeGenerator, CodeGenerator, GoCodeGenerator, JavaCodeGenerator,
+    JavaScriptCodeGenerator, PowerShellCodeGenerator, PythonCodeGenerator, RustCodeGenerator,
 };
 use crate::generator::StringGenerator;
 use crate::patcher::{BinaryPatcher, PatchStrategy};
@@ -55,7 +54,12 @@ pub fn generate_code(tracking_string: &str, language: &str) -> Result<String, Js
         "javascript" | "js" => JavaScriptCodeGenerator.generate(tracking_string),
         "powershell" | "ps1" | "ps" => PowerShellCodeGenerator.generate(tracking_string),
         "java" => JavaCodeGenerator.generate(tracking_string),
-        _ => return Err(JsValue::from_str(&format!("Unknown language: {}", language))),
+        _ => {
+            return Err(JsValue::from_str(&format!(
+                "Unknown language: {}",
+                language
+            )))
+        }
     };
 
     Ok(code)
@@ -75,7 +79,12 @@ pub fn patch_binary(
         "section" => PatchStrategy::Section,
         "extend" => PatchStrategy::Extend,
         "overlay" => PatchStrategy::Overlay,
-        _ => return Err(JsValue::from_str(&format!("Unknown strategy: {}", strategy))),
+        _ => {
+            return Err(JsValue::from_str(&format!(
+                "Unknown strategy: {}",
+                strategy
+            )))
+        }
     };
 
     let (patched_data, _result) = BinaryPatcher::patch_buffer(data, tracking_string, strategy)
@@ -88,8 +97,8 @@ pub fn patch_binary(
 #[cfg(target_arch = "wasm32")]
 #[wasm_bindgen]
 pub fn detect_format(data: &[u8]) -> Result<String, JsValue> {
-    let format = BinaryPatcher::detect_format(data)
-        .map_err(|e| JsValue::from_str(&e.to_string()))?;
+    let format =
+        BinaryPatcher::detect_format(data).map_err(|e| JsValue::from_str(&e.to_string()))?;
     Ok(format.to_string())
 }
 

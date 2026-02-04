@@ -2,9 +2,8 @@ use clap::Parser;
 use redbreadcrumb::{
     cli::{Cli, Commands, Language},
     codegen::{
-        CCodeGenerator, CSharpCodeGenerator, CodeGenerator, GoCodeGenerator,
-        JavaCodeGenerator, JavaScriptCodeGenerator, PowerShellCodeGenerator, PythonCodeGenerator,
-        RustCodeGenerator,
+        CCodeGenerator, CSharpCodeGenerator, CodeGenerator, GoCodeGenerator, JavaCodeGenerator,
+        JavaScriptCodeGenerator, PowerShellCodeGenerator, PythonCodeGenerator, RustCodeGenerator,
     },
     generator::StringGenerator,
     patcher::BinaryPatcher,
@@ -25,7 +24,12 @@ fn run() -> Result<(), Box<dyn std::error::Error>> {
     let cli = Cli::parse();
 
     match cli.command {
-        Commands::Generate { length, tag, prefix, custom } => {
+        Commands::Generate {
+            length,
+            tag,
+            prefix,
+            custom,
+        } => {
             cmd_generate(length, tag, prefix, custom, cli.verbose)?;
         }
         Commands::Yara {
@@ -182,7 +186,10 @@ fn cmd_patch(
 ) -> Result<(), Box<dyn std::error::Error>> {
     let output_path = output.unwrap_or_else(|| {
         let stem = binary.file_stem().unwrap_or_default().to_string_lossy();
-        let ext = binary.extension().map(|e| e.to_string_lossy()).unwrap_or_default();
+        let ext = binary
+            .extension()
+            .map(|e| e.to_string_lossy())
+            .unwrap_or_default();
         let new_name = if ext.is_empty() {
             format!("{}_patched", stem)
         } else {
@@ -198,13 +205,7 @@ fn cmd_patch(
         eprintln!("Strategy: {}", strategy);
     }
 
-    let result = BinaryPatcher::patch(
-        &binary,
-        &output_path,
-        string,
-        strategy.into(),
-        force,
-    )?;
+    let result = BinaryPatcher::patch(&binary, &output_path, string, strategy.into(), force)?;
 
     println!("Successfully patched binary!");
     println!("  Format: {}", result.format);
@@ -250,16 +251,13 @@ fn cmd_list(tag: Option<&str>, json: bool) -> Result<(), Box<dyn std::error::Err
             return Ok(());
         }
 
-        println!("{:<36}  {:<16}  {:<20}  {}", "ID", "Value", "Created", "Tags");
+        println!("{:<36}  {:<16}  {:<20}  Tags", "ID", "Value", "Created");
         println!("{}", "-".repeat(90));
 
         for s in strings {
             let tags = s.tags.join(", ");
             let created = s.created_at.format("%Y-%m-%d %H:%M");
-            println!(
-                "{:<36}  {:<16}  {:<20}  {}",
-                s.id, s.value, created, tags
-            );
+            println!("{:<36}  {:<16}  {:<20}  {}", s.id, s.value, created, tags);
         }
     }
 
@@ -284,7 +282,10 @@ fn cmd_show(identifier: &str) -> Result<(), Box<dyn std::error::Error>> {
                 println!("\nPatched Binaries:");
                 for pb in &s.patched_binaries {
                     println!("  - {} -> {}", pb.original_path, pb.output_path);
-                    println!("    Format: {}, Strategy: {}", pb.binary_format, pb.strategy);
+                    println!(
+                        "    Format: {}, Strategy: {}",
+                        pb.binary_format, pb.strategy
+                    );
                     if let Some(va) = pb.virtual_address {
                         println!("    VA: 0x{:X}", va);
                     }

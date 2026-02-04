@@ -117,12 +117,8 @@ impl BinaryPatcher {
         }
 
         let (patched_data, result) = match format {
-            BinaryFormat::PE32 | BinaryFormat::PE64 => {
-                pe::patch_pe(data, string, strategy)?
-            }
-            BinaryFormat::ELF32 | BinaryFormat::ELF64 => {
-                elf::patch_elf(data, string, strategy)?
-            }
+            BinaryFormat::PE32 | BinaryFormat::PE64 => pe::patch_pe(data, string, strategy)?,
+            BinaryFormat::ELF32 | BinaryFormat::ELF64 => elf::patch_elf(data, string, strategy)?,
             BinaryFormat::MachO32 | BinaryFormat::MachO64 => {
                 macho::patch_macho(data, string, strategy)?
             }

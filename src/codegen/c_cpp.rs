@@ -25,7 +25,12 @@ impl CodeGenerator for CCodeGenerator {
                 escape_c_string(string)
             )
             .unwrap();
-            writeln!(code, "constexpr size_t TRACKING_STRING_LEN = {};", string.len()).unwrap();
+            writeln!(
+                code,
+                "constexpr size_t TRACKING_STRING_LEN = {};",
+                string.len()
+            )
+            .unwrap();
         } else {
             writeln!(code, "#include <string.h>").unwrap();
             writeln!(code).unwrap();
@@ -36,12 +41,7 @@ impl CodeGenerator for CCodeGenerator {
                 escape_c_string(string)
             )
             .unwrap();
-            writeln!(
-                code,
-                "#define TRACKING_STRING_LEN {}",
-                string.len()
-            )
-            .unwrap();
+            writeln!(code, "#define TRACKING_STRING_LEN {}", string.len()).unwrap();
         }
 
         code

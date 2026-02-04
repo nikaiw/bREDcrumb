@@ -8,7 +8,12 @@ impl CodeGenerator for RustCodeGenerator {
         let mut code = String::new();
 
         writeln!(code, "// Tracking string: {}", string).unwrap();
-        writeln!(code, "const TRACKING_STRING: &str = \"{}\";", escape_rust_string(string)).unwrap();
+        writeln!(
+            code,
+            "const TRACKING_STRING: &str = \"{}\";",
+            escape_rust_string(string)
+        )
+        .unwrap();
         writeln!(code, "const TRACKING_STRING_LEN: usize = {};", string.len()).unwrap();
 
         code

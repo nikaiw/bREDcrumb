@@ -128,8 +128,7 @@ fn patch_pe_section(
 
     let raw_data_end =
         last_section.pointer_to_raw_data as usize + last_section.size_of_raw_data as usize;
-    let virtual_end =
-        last_section.virtual_address as usize + last_section.virtual_size as usize;
+    let virtual_end = last_section.virtual_address as usize + last_section.virtual_size as usize;
 
     // Align to file alignment
     let new_section_offset = align_up(raw_data_end, file_alignment);
@@ -185,13 +184,12 @@ fn patch_pe_section(
 
     // Update SizeOfImage
     if pe.header.optional_header.is_some() {
-        let size_of_image_offset = pe.header.dos_header.pe_pointer as usize
-            + 4
-            + 20
-            + if pe.is_64 { 56 } else { 56 };
+        let size_of_image_offset = pe.header.dos_header.pe_pointer as usize + 4 + 20 + 56;
 
-        let new_size_of_image =
-            align_up(new_section_va as usize + new_section_size, section_alignment) as u32;
+        let new_size_of_image = align_up(
+            new_section_va as usize + new_section_size,
+            section_alignment,
+        ) as u32;
         patched[size_of_image_offset..size_of_image_offset + 4]
             .copy_from_slice(&new_size_of_image.to_le_bytes());
     }
@@ -243,10 +241,7 @@ fn patch_pe_extend(
         last_section.size_of_raw_data as usize + align_up(string_bytes.len() + 1, file_alignment);
 
     // Extend file
-    patched.resize(
-        last_section.pointer_to_raw_data as usize + new_raw_size,
-        0,
-    );
+    patched.resize(last_section.pointer_to_raw_data as usize + new_raw_size, 0);
 
     // Write string
     patched[write_offset..write_offset + string_bytes.len()].copy_from_slice(string_bytes);

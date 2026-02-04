@@ -10,7 +10,12 @@ impl CodeGenerator for GoCodeGenerator {
         writeln!(code, "package main").unwrap();
         writeln!(code).unwrap();
         writeln!(code, "// Tracking string: {}", string).unwrap();
-        writeln!(code, "const TrackingString = \"{}\"", escape_go_string(string)).unwrap();
+        writeln!(
+            code,
+            "const TrackingString = \"{}\"",
+            escape_go_string(string)
+        )
+        .unwrap();
         writeln!(code, "const TrackingStringLen = {}", string.len()).unwrap();
 
         code
