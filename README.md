@@ -1,15 +1,16 @@
 # bREDcrumb
 
-**Leave your mark in every binary.** bREDcrumb helps red teams inject unique tracking strings into compiled binaries for attribution and tracking. When blue team discovers your implant, they'll find your breadcrumb — and you'll have the YARA rule ready.
+**Leave your mark in every binary.**
+
+bREDcrumb injects unique tracking strings into your red team binaries. At the end of an engagement, blue team can use these breadcrumbs to **distinguish with certainty** which binaries were deployed by your team versus actual threat actors. It also acts as a **safety net** — ensuring you can reliably identify and clean up all assets where your tools were deployed.
 
 ## Features
 
-- **String Generation**: Create unique tracking strings with custom prefixes
-- **Binary Patching**: Inject strings into PE, ELF, and Mach-O executables
-- **YARA Rules**: Auto-generate detection rules for your tracking strings
-- **Local Database**: Track all generated strings and patched binaries
-- **Code Generation**: Generate code snippets in compiled languages (C, C++, Go, Rust, C#, Java)
-- **WebAssembly Support**: Use in browser-based applications
+- **Binary Patching**: Inject breadcrumbs into PE, ELF, and Mach-O executables
+- **YARA Rules**: Auto-generate detection rules to share with blue team for cleanup
+- **Tracking Database**: Keep track of all breadcrumbs and patched binaries
+- **WebAssembly Support**: Use directly in the browser
+- **Code Snippets**: Generate embeddable code for compiled languages
 
 ## Installation
 

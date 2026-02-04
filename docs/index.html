@@ -34,8 +34,11 @@
     <section id="intro" class="intro">
         <div class="container">
             <p class="intro-text">
-                <strong>bREDcrumb</strong> helps red teams inject unique tracking strings into compiled binaries for attribution and tracking.
-                When blue team discovers your implant, they'll find your breadcrumb &mdash; and you'll have the YARA rule ready.
+                <strong>bREDcrumb</strong> injects unique tracking strings into your red team binaries.
+                At the end of an engagement, blue team can use these breadcrumbs to <strong>distinguish with certainty</strong>
+                which binaries were deployed by your team versus actual threat actors.
+                It also acts as a <strong>safety net</strong> &mdash; ensuring you can reliably identify and clean up
+                all assets where your tools were deployed.
             </p>
         </div>
     </section>
@@ -45,34 +48,29 @@
             <h2>Features</h2>
             <div class="feature-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">&#128273;</div>
-                    <h3>String Generation</h3>
-                    <p>Generate unique tracking strings with custom prefixes, or use your own custom strings for attribution.</p>
-                </div>
-                <div class="feature-card">
                     <div class="feature-icon">&#128190;</div>
                     <h3>Binary Patching</h3>
-                    <p>Inject strings into PE, ELF, and Mach-O binaries using multiple strategies: cave, section, extend, or overlay.</p>
+                    <p>Inject tracking strings into PE, ELF, and Mach-O binaries using multiple strategies: cave, section, extend, or overlay.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">&#128269;</div>
                     <h3>YARA Rules</h3>
-                    <p>Auto-generate YARA detection rules for your tracking strings with ASCII, wide, and hex patterns.</p>
+                    <p>Auto-generate YARA detection rules for your breadcrumbs. Share with blue team for post-engagement cleanup.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">&#128202;</div>
                     <h3>Tracking Database</h3>
-                    <p>Keep track of all generated strings, tags, and patched binaries in a local JSON database.</p>
+                    <p>Keep track of all breadcrumbs, tags, and patched binaries. Know exactly what you deployed and where.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">&#127760;</div>
                     <h3>WebAssembly</h3>
-                    <p>Use directly in the browser with full WASM support - no server required.</p>
+                    <p>Use directly in the browser with full WASM support - no server or installation required.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">&#128187;</div>
                     <h3>Code Snippets</h3>
-                    <p>Generate code snippets for compiled languages: C, C++, Rust, Go, C#, Java - with dead code elimination prevention.</p>
+                    <p>Generate embeddable code for C, C++, Rust, Go, C#, Java with dead code elimination prevention.</p>
                 </div>
             </div>
         </div>
