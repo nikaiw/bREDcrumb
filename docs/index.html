@@ -278,24 +278,28 @@ ac288ebe-a192-4481-a03b-147a2e1f59ce  MY_CUSTOM_MARKER  2026-02-03 10:48      op
                     <div class="output" id="patch-output"></div>
                 </div>
 
-                <div class="demo-panel">
+                <div class="demo-panel demo-panel-wide">
                     <h3>Code Generator</h3>
-                    <div class="form-group">
-                        <label for="code-string">String:</label>
-                        <input type="text" id="code-string" placeholder="Enter tracking string">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="code-string">String:</label>
+                            <input type="text" id="code-string" placeholder="Enter tracking string">
+                        </div>
+                        <div class="form-group">
+                            <label for="code-lang">Language:</label>
+                            <select id="code-lang">
+                                <option value="c">C</option>
+                                <option value="cpp">C++</option>
+                                <option value="rust">Rust</option>
+                                <option value="go">Go</option>
+                                <option value="csharp">C#</option>
+                                <option value="java">Java</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button id="btn-code" class="btn btn-primary">Generate Code</button>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="code-lang">Language:</label>
-                        <select id="code-lang">
-                            <option value="c">C</option>
-                            <option value="cpp">C++</option>
-                            <option value="rust">Rust</option>
-                            <option value="go">Go</option>
-                            <option value="csharp">C#</option>
-                            <option value="java">Java</option>
-                        </select>
-                    </div>
-                    <button id="btn-code" class="btn btn-primary">Generate Code</button>
                     <pre class="output" id="code-output"></pre>
                 </div>
             </div>
