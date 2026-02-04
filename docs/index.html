@@ -117,31 +117,26 @@
             <div class="strategies-explained">
                 <h3>How each strategy works</h3>
 
-                <div class="strategy">
-                    <h4>Cave</h4>
-                    <p>Searches for <strong>code caves</strong> — sequences of null bytes in section padding (alignment gaps between sections).
-                    The string is written into this unused space. Binary size remains unchanged, and no headers are modified.
-                    Most stealthy, but available space is limited.</p>
-                </div>
+                <div class="strategies-grid">
+                    <div class="strategy">
+                        <h4>Cave</h4>
+                        <p>Searches for <strong>code caves</strong> — null bytes in section padding. String is written into unused space. Binary size unchanged, no headers modified. Most stealthy but space is limited.</p>
+                    </div>
 
-                <div class="strategy">
-                    <h4>Section</h4>
-                    <p>Creates a <strong>new section</strong> in the binary's section table (e.g., <code>.bcrumb</code> for PE files).
-                    Updates the section count and size fields in the file header. Reliable and works with any string size,
-                    but modifies the binary structure.</p>
-                </div>
+                    <div class="strategy">
+                        <h4>Section</h4>
+                        <p>Creates a <strong>new section</strong> in the binary's section table (e.g., <code>.bcrumb</code>). Updates section count and size fields. Reliable for any string size but modifies structure.</p>
+                    </div>
 
-                <div class="strategy">
-                    <h4>Extend</h4>
-                    <p>Extends the <strong>last section</strong> of the binary by increasing its size fields and appending data at the end.
-                    Less intrusive than adding a new section, but increases file size. The extended region is mapped into memory at runtime.</p>
-                </div>
+                    <div class="strategy">
+                        <h4>Extend</h4>
+                        <p>Extends the <strong>last section</strong> by increasing its size and appending data. Less intrusive than new section. Data is mapped into memory at runtime.</p>
+                    </div>
 
-                <div class="strategy">
-                    <h4>Overlay</h4>
-                    <p>Appends data <strong>after the file's declared end</strong> (past the last section).
-                    No headers are modified — the loader ignores this region entirely. Simplest and safest approach,
-                    but the data is not mapped into process memory (only visible with file scanning).</p>
+                    <div class="strategy">
+                        <h4>Overlay</h4>
+                        <p>Appends data <strong>past the file's end</strong>. No headers modified, loader ignores this region. Simplest approach but data not mapped into process memory.</p>
+                    </div>
                 </div>
             </div>
         </div>

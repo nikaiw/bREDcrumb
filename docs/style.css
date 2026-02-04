@@ -248,43 +248,70 @@ td.yes {
 
 /* Strategies Explained */
 .strategies-explained {
-    margin-top: 50px;
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-top: 80px;
+    padding-top: 60px;
+    border-top: 1px solid var(--border);
 }
 
 .strategies-explained h3 {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
     color: var(--text-primary);
+    font-size: 1.5rem;
+}
+
+.strategies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
 .strategy {
-    background: var(--bg-tertiary);
+    background: var(--bg-primary);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 20px 25px;
-    margin-bottom: 15px;
+    border-radius: 12px;
+    padding: 25px 30px;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.strategy:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
 }
 
 .strategy h4 {
     color: var(--accent);
-    margin-bottom: 10px;
-    font-size: 1.1rem;
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.strategy h4::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
 }
 
 .strategy p {
     color: var(--text-secondary);
     line-height: 1.7;
     margin: 0;
+    font-size: 0.95rem;
 }
 
 .strategy code {
-    background: var(--code-bg);
-    padding: 2px 6px;
+    background: var(--bg-tertiary);
+    padding: 2px 8px;
     border-radius: 4px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    color: var(--text-primary);
 }
 
 /* Install */
