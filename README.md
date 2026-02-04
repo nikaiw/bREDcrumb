@@ -2,7 +2,7 @@
 
 **Leave your mark in every binary.**
 
-bREDcrumb injects unique tracking strings into your red team binaries. At the end of an engagement, blue team can use these breadcrumbs to **distinguish with certainty** which binaries were deployed by your team versus actual threat actors. It also acts as a **safety net** — ensuring you can reliably identify and clean up all assets where your tools were deployed.
+bREDcrumb injects unique tracking strings into your red team tools and implants. At the end of an engagement, blue team can use these breadcrumbs to **distinguish with certainty** which binaries were deployed by your team versus actual threat actors. It also acts as a **safety net** — ensuring you can reliably identify and clean up all assets where your tools were deployed.
 
 ## Features
 
