@@ -1,5 +1,4 @@
-use clap::Parser;
-use redbreadcrumb::{
+use bredcrumb::{
     cli::{Cli, Commands, Language},
     codegen::{
         CCodeGenerator, CSharpCodeGenerator, CodeGenerator, GoCodeGenerator, JavaCodeGenerator,
@@ -10,6 +9,7 @@ use redbreadcrumb::{
     storage::{Storage, TrackedString},
     yara::{YaraGenerator, YaraOptions},
 };
+use clap::Parser;
 use std::fs;
 use std::path::PathBuf;
 
@@ -177,7 +177,7 @@ fn cmd_patch(
     binary: PathBuf,
     string: &str,
     output: Option<PathBuf>,
-    strategy: redbreadcrumb::cli::PatchStrategy,
+    strategy: bredcrumb::cli::PatchStrategy,
     force: bool,
     verbose: bool,
 ) -> Result<(), Box<dyn std::error::Error>> {

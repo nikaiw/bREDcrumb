@@ -1,4 +1,4 @@
-// RedBreadcrumb - WASM Demo Application
+// bREDcrumb - WASM Demo Application
 
 let wasmModule = null;
 let wasmReady = false;
@@ -11,7 +11,7 @@ async function initWasm() {
         console.log('[WASM] Starting initialization...');
 
         // Dynamically import the module
-        const module = await import('./pkg/redbreadcrumb.js');
+        const module = await import('./pkg/bredcrumb.js');
         console.log('[WASM] Module imported, initializing...');
 
         // Initialize the WASM - this loads the .wasm file
@@ -181,7 +181,7 @@ public class TrackingString {
         return `rule ${ruleName} {
     meta:
         description = "Detects tracking string: ${str}"
-        author = "redbreadcrumb"
+        author = "bredcrumb"
         date = "${new Date().toISOString().split('T')[0]}"
 
     strings:

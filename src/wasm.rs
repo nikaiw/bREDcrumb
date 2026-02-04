@@ -1,4 +1,4 @@
-//! WebAssembly entry points for redbreadcrumb
+//! WebAssembly entry points for bREDcrumb
 //!
 //! This module provides WASM-compatible functions for use in browsers and Node.js.
 //! All functions work on in-memory data, avoiding filesystem dependencies.

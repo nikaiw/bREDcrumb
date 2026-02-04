@@ -74,6 +74,25 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "812e12b5285cc515a9c72a5c1d3b6d46a19dac5acfef5265968c166106e31dd3"
 
 [[package]]
+name = "bredcrumb"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "clap",
+ "dirs",
+ "getrandom 0.2.17",
+ "goblin",
+ "hex",
+ "rand",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "thiserror",
+ "uuid",
+ "wasm-bindgen",
+]
+
+[[package]]
 name = "bumpalo"
 version = "3.19.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -426,25 +445,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ec0be4795e2f6a28069bec0b5ff3e2ac9bafc99e6a9a7dc3547996c5c816922c"
 dependencies = [
  "getrandom 0.2.17",
-]
-
-[[package]]
-name = "redbreadcrumb"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "clap",
- "dirs",
- "getrandom 0.2.17",
- "goblin",
- "hex",
- "rand",
- "serde",
- "serde_json",
- "tempfile",
- "thiserror",
- "uuid",
- "wasm-bindgen",
 ]
 
 [[package]]

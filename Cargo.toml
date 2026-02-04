@@ -1,14 +1,14 @@
 [package]
-name = "redbreadcrumb"
+name = "bredcrumb"
 version = "0.1.0"
 edition = "2021"
 authors = ["Red Team"]
 description = "CLI tool for generating tracking strings, YARA rules, code snippets, and patching binaries"
 license = "MIT"
-repository = "https://github.com/nikaiw/redbreadcrumb"
+repository = "https://github.com/nikaiw/bREDcrumb"
 
 [[bin]]
-name = "redbreadcrumb"
+name = "bredcrumb"
 path = "src/main.rs"
 
 [lib]

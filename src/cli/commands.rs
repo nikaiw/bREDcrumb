@@ -2,7 +2,7 @@ use clap::{Parser, Subcommand, ValueEnum};
 use std::path::PathBuf;
 
 #[derive(Parser)]
-#[command(name = "redbreadcrumb")]
+#[command(name = "bredcrumb")]
 #[command(about = "Generate tracking strings, YARA rules, code snippets, and patch binaries")]
 #[command(version)]
 pub struct Cli {
@@ -168,7 +168,7 @@ mod tests {
 
     #[test]
     fn test_generate_command() {
-        let cli = Cli::try_parse_from(["redbreadcrumb", "generate"]).unwrap();
+        let cli = Cli::try_parse_from(["bredcrumb", "generate"]).unwrap();
         match cli.command {
             Commands::Generate { length, prefix, .. } => {
                 assert_eq!(length, 12);
@@ -180,8 +180,7 @@ mod tests {
 
     #[test]
     fn test_generate_with_custom() {
-        let cli =
-            Cli::try_parse_from(["redbreadcrumb", "generate", "--custom", "MY_TRACKER"]).unwrap();
+        let cli = Cli::try_parse_from(["bredcrumb", "generate", "--custom", "MY_TRACKER"]).unwrap();
         match cli.command {
             Commands::Generate { custom, .. } => {
                 assert_eq!(custom, Some("MY_TRACKER".to_string()));
@@ -192,7 +191,7 @@ mod tests {
 
     #[test]
     fn test_yara_command() {
-        let cli = Cli::try_parse_from(["redbreadcrumb", "yara", "TEST123"]).unwrap();
+        let cli = Cli::try_parse_from(["bredcrumb", "yara", "TEST123"]).unwrap();
         match cli.command {
             Commands::Yara {
                 string,
@@ -210,7 +209,7 @@ mod tests {
 
     #[test]
     fn test_yara_with_wide() {
-        let cli = Cli::try_parse_from(["redbreadcrumb", "yara", "TEST123", "--wide"]).unwrap();
+        let cli = Cli::try_parse_from(["bredcrumb", "yara", "TEST123", "--wide"]).unwrap();
         match cli.command {
             Commands::Yara { wide, .. } => {
                 assert!(wide);
@@ -221,7 +220,7 @@ mod tests {
 
     #[test]
     fn test_code_command() {
-        let cli = Cli::try_parse_from(["redbreadcrumb", "code", "TEST123"]).unwrap();
+        let cli = Cli::try_parse_from(["bredcrumb", "code", "TEST123"]).unwrap();
         match cli.command {
             Commands::Code {
                 string, language, ..
@@ -235,7 +234,7 @@ mod tests {
 
     #[test]
     fn test_code_with_language() {
-        let cli = Cli::try_parse_from(["redbreadcrumb", "code", "TEST123", "-l", "rust"]).unwrap();
+        let cli = Cli::try_parse_from(["bredcrumb", "code", "TEST123", "-l", "rust"]).unwrap();
         match cli.command {
             Commands::Code { language, .. } => {
                 assert!(matches!(language, Language::Rust));
@@ -246,8 +245,7 @@ mod tests {
 
     #[test]
     fn test_patch_command() {
-        let cli =
-            Cli::try_parse_from(["redbreadcrumb", "patch", "/tmp/test.exe", "TRACKER"]).unwrap();
+        let cli = Cli::try_parse_from(["bredcrumb", "patch", "/tmp/test.exe", "TRACKER"]).unwrap();
         match cli.command {
             Commands::Patch {
                 binary,
@@ -266,7 +264,7 @@ mod tests {
     #[test]
     fn test_patch_with_strategy() {
         let cli = Cli::try_parse_from([
-            "redbreadcrumb",
+            "bredcrumb",
             "patch",
             "/tmp/test.exe",
             "TRACKER",
@@ -284,7 +282,7 @@ mod tests {
 
     #[test]
     fn test_list_command() {
-        let cli = Cli::try_parse_from(["redbreadcrumb", "list"]).unwrap();
+        let cli = Cli::try_parse_from(["bredcrumb", "list"]).unwrap();
         match cli.command {
             Commands::List { tag, json } => {
                 assert!(tag.is_none());
@@ -296,7 +294,7 @@ mod tests {
 
     #[test]
     fn test_list_with_json() {
-        let cli = Cli::try_parse_from(["redbreadcrumb", "list", "--json"]).unwrap();
+        let cli = Cli::try_parse_from(["bredcrumb", "list", "--json"]).unwrap();
         match cli.command {
             Commands::List { json, .. } => {
                 assert!(json);
@@ -307,7 +305,7 @@ mod tests {
 
     #[test]
     fn test_show_command() {
-        let cli = Cli::try_parse_from(["redbreadcrumb", "show", "abc123"]).unwrap();
+        let cli = Cli::try_parse_from(["bredcrumb", "show", "abc123"]).unwrap();
         match cli.command {
             Commands::Show { identifier } => {
                 assert_eq!(identifier, "abc123");
@@ -318,14 +316,14 @@ mod tests {
 
     #[test]
     fn test_verbose_flag() {
-        let cli = Cli::try_parse_from(["redbreadcrumb", "-v", "list"]).unwrap();
+        let cli = Cli::try_parse_from(["bredcrumb", "-v", "list"]).unwrap();
         assert!(cli.verbose);
     }
 
     #[test]
     fn test_all_languages() {
         for lang in ["c", "cpp", "go", "rust", "csharp", "java"] {
-            let cli = Cli::try_parse_from(["redbreadcrumb", "code", "TEST", "-l", lang]).unwrap();
+            let cli = Cli::try_parse_from(["bredcrumb", "code", "TEST", "-l", lang]).unwrap();
             match cli.command {
                 Commands::Code { .. } => {}
                 _ => panic!("Expected Code command"),
@@ -336,15 +334,9 @@ mod tests {
     #[test]
     fn test_all_strategies() {
         for strategy in ["cave", "section", "extend", "overlay"] {
-            let cli = Cli::try_parse_from([
-                "redbreadcrumb",
-                "patch",
-                "/tmp/test",
-                "TRACK",
-                "-s",
-                strategy,
-            ])
-            .unwrap();
+            let cli =
+                Cli::try_parse_from(["bredcrumb", "patch", "/tmp/test", "TRACK", "-s", strategy])
+                    .unwrap();
             match cli.command {
                 Commands::Patch { .. } => {}
                 _ => panic!("Expected Patch command"),

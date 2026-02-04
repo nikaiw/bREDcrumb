@@ -1,4 +1,4 @@
-/* Red Team Strings - GitHub Pages Style */
+/* bREDcrumb - GitHub Pages Style */
 
 :root {
     --bg-primary: #0d1117;
@@ -110,6 +110,26 @@ body {
     display: flex;
     gap: 15px;
     justify-content: center;
+}
+
+/* Intro */
+.intro {
+    padding: 60px 0;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+}
+
+.intro-text {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+.intro-text strong {
+    color: var(--accent);
 }
 
 /* Buttons */

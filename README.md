@@ -1,14 +1,14 @@
-# RedBreadcrumb
+# bREDcrumb
 
-A red team tool for generating, injecting, and tracking unique strings ("breadcrumbs") in binaries. Perfect for payload tracking, attribution, and detection rule generation.
+**Leave your mark in every binary.** bREDcrumb helps red teams inject unique tracking strings into compiled binaries for attribution and tracking. When blue team discovers your implant, they'll find your breadcrumb — and you'll have the YARA rule ready.
 
 ## Features
 
 - **String Generation**: Create unique tracking strings with custom prefixes
 - **Binary Patching**: Inject strings into PE, ELF, and Mach-O executables
-- **Code Generation**: Generate code snippets in 9 languages (C, C++, Python, Go, Rust, C#, JavaScript, PowerShell, Java)
 - **YARA Rules**: Auto-generate detection rules for your tracking strings
 - **Local Database**: Track all generated strings and patched binaries
+- **Code Generation**: Generate code snippets in compiled languages (C, C++, Go, Rust, C#, Java)
 - **WebAssembly Support**: Use in browser-based applications
 
 ## Installation
@@ -16,17 +16,17 @@ A red team tool for generating, injecting, and tracking unique strings ("breadcr
 ### From Source
 
 ```bash
-git clone https://github.com/nikaiw/redbreadcrumb.git
-cd redbreadcrumb
+git clone https://github.com/nikaiw/bREDcrumb.git
+cd bREDcrumb
 cargo build --release
 ```
 
-The binary will be at `target/release/redbreadcrumb`.
+The binary will be at `target/release/bredcrumb`.
 
 ### For WASM
 
 ```bash
-cargo build --lib --target wasm32-unknown-unknown --release
+wasm-pack build --target web --out-dir docs/pkg
 ```
 
 ## Quick Start
@@ -35,30 +35,30 @@ cargo build --lib --target wasm32-unknown-unknown --release
 
 ```bash
 # Generate a 16-character random string
-redbreadcrumb generate -l 16
+bredcrumb generate -l 16
 
 # With a custom prefix and tag
-redbreadcrumb generate -l 12 --prefix "OP_" --tag "campaign-alpha"
+bredcrumb generate -l 12 --prefix "OP_" --tag "campaign-alpha"
 
 # Use your own custom string
-redbreadcrumb generate --custom "MY_CUSTOM_TRACKER_123" --tag "op-beta"
+bredcrumb generate --custom "MY_CUSTOM_TRACKER_123" --tag "op-beta"
 ```
 
 ### Inject into a Binary
 
 ```bash
 # Inject using code cave strategy (default)
-redbreadcrumb patch ./payload.exe "TRACK_ABC123" -o ./payload_tracked.exe
+bredcrumb patch ./payload.exe "TRACK_ABC123" -o ./payload_tracked.exe
 
 # Available strategies: cave, section, extend, overlay
-redbreadcrumb patch ./payload.elf "TRACK_XYZ" -s overlay
+bredcrumb patch ./payload.elf "TRACK_XYZ" -s overlay
 ```
 
 ### Generate Detection Rules
 
 ```bash
 # Generate YARA rule
-redbreadcrumb yara "TRACK_ABC123" --ascii --wide
+bredcrumb yara "TRACK_ABC123" --ascii --wide
 
 # Output:
 # rule tracking_string_TRACK_ABC123 {
@@ -72,36 +72,36 @@ redbreadcrumb yara "TRACK_ABC123" --ascii --wide
 ### Generate Code Snippets
 
 ```bash
-# Generate C code
-redbreadcrumb code "TRACK_ABC123" -l c
+# Generate C code with DCE prevention
+bredcrumb code "TRACK_ABC123" -l c
 
-# Generate Python code
-redbreadcrumb code "TRACK_ABC123" -l python
+# Generate Rust code
+bredcrumb code "TRACK_ABC123" -l rust
 
 # Save to file
-redbreadcrumb code "TRACK_ABC123" -l rust -o tracking.rs
+bredcrumb code "TRACK_ABC123" -l go -o tracking.go
 ```
 
 ### Manage Tracked Strings
 
 ```bash
 # List all tracked strings
-redbreadcrumb list
+bredcrumb list
 
 # Filter by tag
-redbreadcrumb list --tag "campaign-alpha"
+bredcrumb list --tag "campaign-alpha"
 
 # Show details for a specific string
-redbreadcrumb show <id-or-value>
+bredcrumb show <id-or-value>
 
 # Export as JSON
-redbreadcrumb list --json
+bredcrumb list --json
 ```
 
 ## CLI Reference
 
 ```
-Usage: redbreadcrumb [OPTIONS] <COMMAND>
+Usage: bredcrumb [OPTIONS] <COMMAND>
 
 Commands:
   generate  Generate a new tracking string
@@ -119,26 +119,23 @@ Options:
 
 ## Supported Languages
 
-| Language   | Flag          | Use Case                    |
-|------------|---------------|-----------------------------|
-| C          | `-l c`        | Native implants             |
-| C++        | `-l cpp`      | Native implants             |
-| Python     | `-l python`   | Scripts, tools              |
-| Go         | `-l go`       | Cross-platform tools        |
-| Rust       | `-l rust`     | Native implants             |
-| C#         | `-l csharp`   | .NET assemblies             |
-| JavaScript | `-l javascript` | Node.js, Electron         |
-| PowerShell | `-l powershell` | Windows scripts           |
-| Java       | `-l java`     | Cross-platform, Android     |
+| Language | Flag        | Use Case                |
+|----------|-------------|-------------------------|
+| C        | `-l c`      | Native implants         |
+| C++      | `-l cpp`    | Native implants         |
+| Go       | `-l go`     | Cross-platform tools    |
+| Rust     | `-l rust`   | Native implants         |
+| C#       | `-l csharp` | .NET assemblies         |
+| Java     | `-l java`   | Cross-platform, Android |
 
 ## Patch Strategies
 
-| Strategy | Description                              | Formats       |
-|----------|------------------------------------------|---------------|
+| Strategy | Description                              | Formats         |
+|----------|------------------------------------------|-----------------|
 | `cave`   | Use existing code caves (padding bytes)  | PE, ELF, Mach-O |
 | `section`| Add to existing section padding          | PE, ELF, Mach-O |
 | `extend` | Extend a section                         | PE, ELF, Mach-O |
-| `overlay`| Append to file end (simplest)            | All           |
+| `overlay`| Append to file end (simplest)            | All             |
 
 ## License
 

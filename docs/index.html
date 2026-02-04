@@ -3,33 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RedBreadcrumb - Binary Tracking String Toolkit</title>
+    <title>bREDcrumb - Binary Tracking String Toolkit</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <nav class="navbar">
         <div class="container">
-            <a href="#" class="logo">RedBreadcrumb</a>
+            <a href="#" class="logo">bREDcrumb</a>
             <ul class="nav-links">
                 <li><a href="#features">Features</a></li>
                 <li><a href="#install">Install</a></li>
                 <li><a href="#usage">Usage</a></li>
                 <li><a href="#demo">Demo</a></li>
-                <li><a href="https://github.com/nikaiw/redbreadcrumb" class="btn-github">GitHub</a></li>
+                <li><a href="https://github.com/nikaiw/bREDcrumb" class="btn-github">GitHub</a></li>
             </ul>
         </div>
     </nav>
 
     <header class="hero">
         <div class="container">
-            <h1>RedBreadcrumb</h1>
-            <p class="tagline">Generate, inject, and track unique strings in compiled binaries</p>
+            <h1>bREDcrumb</h1>
+            <p class="tagline">Leave your mark in every binary</p>
             <div class="hero-buttons">
                 <a href="#install" class="btn btn-primary">Get Started</a>
                 <a href="#demo" class="btn btn-secondary">Try Demo</a>
             </div>
         </div>
     </header>
+
+    <section id="intro" class="intro">
+        <div class="container">
+            <p class="intro-text">
+                <strong>bREDcrumb</strong> helps red teams inject unique tracking strings into compiled binaries for attribution and tracking.
+                When blue team discovers your implant, they'll find your breadcrumb &mdash; and you'll have the YARA rule ready.
+            </p>
+        </div>
+    </section>
 
     <section id="features" class="features">
         <div class="container">
@@ -51,9 +60,9 @@
                     <p>Auto-generate YARA detection rules for your tracking strings with ASCII, wide, and hex patterns.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">&#128187;</div>
-                    <h3>Code Snippets</h3>
-                    <p>Generate code snippets for compiled languages: C, C++, Rust, Go, C#, Java - with dead code elimination prevention.</p>
+                    <div class="feature-icon">&#128202;</div>
+                    <h3>Tracking Database</h3>
+                    <p>Keep track of all generated strings, tags, and patched binaries in a local JSON database.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">&#127760;</div>
@@ -61,9 +70,9 @@
                     <p>Use directly in the browser with full WASM support - no server required.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">&#128202;</div>
-                    <h3>Tracking Database</h3>
-                    <p>Keep track of all generated strings, tags, and patched binaries in a local JSON database.</p>
+                    <div class="feature-icon">&#128187;</div>
+                    <h3>Code Snippets</h3>
+                    <p>Generate code snippets for compiled languages: C, C++, Rust, Go, C#, Java - with dead code elimination prevention.</p>
                 </div>
             </div>
         </div>
@@ -117,10 +126,10 @@
             <div class="install-options">
                 <div class="install-option">
                     <h3>From Source (Cargo)</h3>
-                    <pre><code>git clone https://github.com/nikaiw/redbreadcrumb
-cd redbreadcrumb
+                    <pre><code>git clone https://github.com/nikaiw/bREDcrumb
+cd bREDcrumb
 cargo build --release
-./target/release/redbreadcrumb --help</code></pre>
+./target/release/bredcrumb --help</code></pre>
                 </div>
             </div>
         </div>
@@ -132,16 +141,16 @@ cargo build --release
 
             <div class="usage-block">
                 <h3>Generate a Tracking String</h3>
-                <pre><code><span class="prompt">$</span> redbreadcrumb generate -l 16 -t "operation-alpha"
+                <pre><code><span class="prompt">$</span> bredcrumb generate -l 16 -t "operation-alpha"
 RT8AfENUlAMN3hPk
 
-<span class="prompt">$</span> redbreadcrumb generate --custom "MY_CUSTOM_MARKER" -t "op-beta"
+<span class="prompt">$</span> bredcrumb generate --custom "MY_CUSTOM_MARKER" -t "op-beta"
 MY_CUSTOM_MARKER</code></pre>
             </div>
 
             <div class="usage-block">
                 <h3>Patch a Binary</h3>
-                <pre><code><span class="prompt">$</span> redbreadcrumb patch ./implant.exe "RT8AfENUlAMN3hPk" -s cave
+                <pre><code><span class="prompt">$</span> bredcrumb patch ./implant.exe "RT8AfENUlAMN3hPk" -s cave
 Successfully patched binary!
   Format: PE64
   Strategy: cave (.rdata)
@@ -149,7 +158,7 @@ Successfully patched binary!
   File Offset: 0x6EB0
   Output: ./implant_patched.exe
 
-<span class="prompt">$</span> redbreadcrumb patch ./beacon -s overlay -o ./beacon_tracked
+<span class="prompt">$</span> bredcrumb patch ./beacon -s overlay -o ./beacon_tracked
 Successfully patched binary!
   Format: ELF64
   Strategy: overlay
@@ -158,11 +167,11 @@ Successfully patched binary!
 
             <div class="usage-block">
                 <h3>Generate YARA Rule</h3>
-                <pre><code><span class="prompt">$</span> redbreadcrumb yara "RT8AfENUlAMN3hPk" --ascii --wide
+                <pre><code><span class="prompt">$</span> bredcrumb yara "RT8AfENUlAMN3hPk" --ascii --wide
 rule tracking_string_RT8AfENU {
     meta:
         description = "Detects tracking string: RT8AfENUlAMN3hPk"
-        author = "redbreadcrumb"
+        author = "bredcrumb"
 
     strings:
         $tracking_string = "RT8AfENUlAMN3hPk" ascii wide
@@ -174,33 +183,8 @@ rule tracking_string_RT8AfENU {
             </div>
 
             <div class="usage-block">
-                <h3>Generate Code Snippets</h3>
-                <pre><code><span class="prompt">$</span> redbreadcrumb code "MARKER" -l c
-#include &lt;stdio.h&gt;
-
-/* Tracking string - DO NOT REMOVE */
-static volatile const char TRACKING_STRING[] = "MARKER";
-
-__attribute__((constructor, used))
-static void _tracking_init(void) {
-    volatile const char* p = TRACKING_STRING;
-    (void)p;
-}
-
-<span class="prompt">$</span> redbreadcrumb code "MARKER" -l rust
-#[used]
-#[no_mangle]
-static TRACKING_STRING: &amp;[u8] = b"MARKER";
-
-#[inline(never)]
-fn _tracking_init() {
-    let _ = unsafe { std::ptr::read_volatile(&amp;TRACKING_STRING) };
-}</code></pre>
-            </div>
-
-            <div class="usage-block">
                 <h3>List Tracked Strings</h3>
-                <pre><code><span class="prompt">$</span> redbreadcrumb list
+                <pre><code><span class="prompt">$</span> bredcrumb list
 ID                                    Value             Created               Tags
 ------------------------------------------------------------------------------------------
 24ba2d8f-121b-488a-b6d9-84267c61ba42  RT8AfENUlAMN3hPk  2026-02-03 08:58      operation-alpha
@@ -212,7 +196,7 @@ ac288ebe-a192-4481-a03b-147a2e1f59ce  MY_CUSTOM_MARKER  2026-02-03 10:48      op
     <section id="demo" class="demo">
         <div class="container">
             <h2>Interactive Demo</h2>
-            <p class="demo-subtitle">Try RedBreadcrumb directly in your browser using WebAssembly</p>
+            <p class="demo-subtitle">Try bREDcrumb directly in your browser using WebAssembly</p>
 
             <div class="demo-container">
                 <div class="demo-panel">
@@ -227,27 +211,6 @@ ac288ebe-a192-4481-a03b-147a2e1f59ce  MY_CUSTOM_MARKER  2026-02-03 10:48      op
                     </div>
                     <button id="btn-generate" class="btn btn-primary">Generate</button>
                     <div class="output" id="gen-output"></div>
-                </div>
-
-                <div class="demo-panel">
-                    <h3>Code Generator</h3>
-                    <div class="form-group">
-                        <label for="code-string">String:</label>
-                        <input type="text" id="code-string" placeholder="Enter tracking string">
-                    </div>
-                    <div class="form-group">
-                        <label for="code-lang">Language:</label>
-                        <select id="code-lang">
-                            <option value="c">C</option>
-                            <option value="cpp">C++</option>
-                            <option value="rust">Rust</option>
-                            <option value="go">Go</option>
-                            <option value="csharp">C#</option>
-                            <option value="java">Java</option>
-                        </select>
-                    </div>
-                    <button id="btn-code" class="btn btn-primary">Generate Code</button>
-                    <pre class="output" id="code-output"></pre>
                 </div>
 
                 <div class="demo-panel">
@@ -292,6 +255,27 @@ ac288ebe-a192-4481-a03b-147a2e1f59ce  MY_CUSTOM_MARKER  2026-02-03 10:48      op
                     <button id="btn-patch" class="btn btn-primary">Patch Binary</button>
                     <div class="output" id="patch-output"></div>
                 </div>
+
+                <div class="demo-panel">
+                    <h3>Code Generator</h3>
+                    <div class="form-group">
+                        <label for="code-string">String:</label>
+                        <input type="text" id="code-string" placeholder="Enter tracking string">
+                    </div>
+                    <div class="form-group">
+                        <label for="code-lang">Language:</label>
+                        <select id="code-lang">
+                            <option value="c">C</option>
+                            <option value="cpp">C++</option>
+                            <option value="rust">Rust</option>
+                            <option value="go">Go</option>
+                            <option value="csharp">C#</option>
+                            <option value="java">Java</option>
+                        </select>
+                    </div>
+                    <button id="btn-code" class="btn btn-primary">Generate Code</button>
+                    <pre class="output" id="code-output"></pre>
+                </div>
             </div>
 
             <div id="wasm-loading" class="wasm-status">Loading WebAssembly module...</div>
@@ -300,7 +284,7 @@ ac288ebe-a192-4481-a03b-147a2e1f59ce  MY_CUSTOM_MARKER  2026-02-03 10:48      op
 
     <footer class="footer">
         <div class="container">
-            <p>RedBreadcrumb - A binary tracking toolkit for security professionals</p>
+            <p>bREDcrumb - A binary tracking toolkit for security professionals</p>
             <p class="disclaimer">For authorized security testing and research only.</p>
         </div>
     </footer>
