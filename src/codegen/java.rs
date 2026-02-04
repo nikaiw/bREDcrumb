@@ -7,20 +7,30 @@ impl CodeGenerator for JavaCodeGenerator {
     fn generate(&self, string: &str) -> String {
         let mut code = String::new();
 
-        writeln!(code, "// Tracking string: {}", string).unwrap();
+        writeln!(code, "// Tracking string - DO NOT REMOVE").unwrap();
+        writeln!(
+            code,
+            "// This string is used for binary attribution/tracking"
+        )
+        .unwrap();
+        writeln!(code).unwrap();
         writeln!(code, "public class TrackingString {{").unwrap();
         writeln!(
             code,
-            "    public static final String TRACKING_STRING = \"{}\";",
+            "    public static final String VALUE = \"{}\";",
             escape_java_string(string)
         )
         .unwrap();
+        writeln!(code).unwrap();
         writeln!(
             code,
-            "    public static final int TRACKING_STRING_LEN = {};",
-            string.len()
+            "    // Static block ensures the string is kept in the class file"
         )
         .unwrap();
+        writeln!(code, "    static {{").unwrap();
+        writeln!(code, "        @SuppressWarnings(\"unused\")").unwrap();
+        writeln!(code, "        int len = VALUE.length();").unwrap();
+        writeln!(code, "    }}").unwrap();
         writeln!(code, "}}").unwrap();
 
         code

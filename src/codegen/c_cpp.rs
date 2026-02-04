@@ -16,32 +16,59 @@ impl CodeGenerator for CCodeGenerator {
         let mut code = String::new();
 
         if self.use_cpp {
-            writeln!(code, "#include <cstring>").unwrap();
+            writeln!(code, "#include <cstdio>").unwrap();
             writeln!(code).unwrap();
-            writeln!(code, "// Tracking string: {}", string).unwrap();
+            writeln!(code, "// Tracking string - DO NOT REMOVE").unwrap();
             writeln!(
                 code,
-                "constexpr char TRACKING_STRING[] = \"{}\";",
+                "// This string is used for binary attribution/tracking"
+            )
+            .unwrap();
+            writeln!(code).unwrap();
+            writeln!(
+                code,
+                "static volatile const char TRACKING_STRING[] = \"{}\";",
                 escape_c_string(string)
             )
             .unwrap();
+            writeln!(code).unwrap();
             writeln!(
                 code,
-                "constexpr size_t TRACKING_STRING_LEN = {};",
-                string.len()
+                "// Call this function once at startup to ensure the string is kept"
             )
             .unwrap();
+            writeln!(code, "__attribute__((constructor, used))").unwrap();
+            writeln!(code, "static void _tracking_init() {{").unwrap();
+            writeln!(code, "    volatile const char* p = TRACKING_STRING;").unwrap();
+            writeln!(code, "    (void)p;").unwrap();
+            writeln!(code, "}}").unwrap();
         } else {
-            writeln!(code, "#include <string.h>").unwrap();
+            writeln!(code, "#include <stdio.h>").unwrap();
             writeln!(code).unwrap();
-            writeln!(code, "/* Tracking string: {} */", string).unwrap();
+            writeln!(code, "/* Tracking string - DO NOT REMOVE */").unwrap();
             writeln!(
                 code,
-                "static const char tracking_string[] = \"{}\";",
+                "/* This string is used for binary attribution/tracking */"
+            )
+            .unwrap();
+            writeln!(code).unwrap();
+            writeln!(
+                code,
+                "static volatile const char TRACKING_STRING[] = \"{}\";",
                 escape_c_string(string)
             )
             .unwrap();
-            writeln!(code, "#define TRACKING_STRING_LEN {}", string.len()).unwrap();
+            writeln!(code).unwrap();
+            writeln!(
+                code,
+                "/* Call this function once at startup to ensure the string is kept */"
+            )
+            .unwrap();
+            writeln!(code, "__attribute__((constructor, used))").unwrap();
+            writeln!(code, "static void _tracking_init(void) {{").unwrap();
+            writeln!(code, "    volatile const char* p = TRACKING_STRING;").unwrap();
+            writeln!(code, "    (void)p;").unwrap();
+            writeln!(code, "}}").unwrap();
         }
 
         code

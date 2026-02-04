@@ -53,7 +53,7 @@
                 <div class="feature-card">
                     <div class="feature-icon">&#128187;</div>
                     <h3>Code Snippets</h3>
-                    <p>Generate code in 9 languages: C, C++, Rust, Go, Python, C#, JavaScript, PowerShell, Java.</p>
+                    <p>Generate code snippets for compiled languages: C, C++, Rust, Go, C#, Java - with dead code elimination prevention.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">&#127760;</div>
@@ -175,15 +175,27 @@ rule tracking_string_RT8AfENU {
 
             <div class="usage-block">
                 <h3>Generate Code Snippets</h3>
-                <pre><code><span class="prompt">$</span> redbreadcrumb code "MARKER" -l python
-# Tracking string: MARKER
-TRACKING_STRING = "MARKER"
-TRACKING_STRING_LEN = 6
+                <pre><code><span class="prompt">$</span> redbreadcrumb code "MARKER" -l c
+#include &lt;stdio.h&gt;
+
+/* Tracking string - DO NOT REMOVE */
+static volatile const char TRACKING_STRING[] = "MARKER";
+
+__attribute__((constructor, used))
+static void _tracking_init(void) {
+    volatile const char* p = TRACKING_STRING;
+    (void)p;
+}
 
 <span class="prompt">$</span> redbreadcrumb code "MARKER" -l rust
-// Tracking string: MARKER
-const TRACKING_STRING: &str = "MARKER";
-const TRACKING_STRING_LEN: usize = 6;</code></pre>
+#[used]
+#[no_mangle]
+static TRACKING_STRING: &amp;[u8] = b"MARKER";
+
+#[inline(never)]
+fn _tracking_init() {
+    let _ = unsafe { std::ptr::read_volatile(&amp;TRACKING_STRING) };
+}</code></pre>
             </div>
 
             <div class="usage-block">
@@ -226,13 +238,11 @@ ac288ebe-a192-4481-a03b-147a2e1f59ce  MY_CUSTOM_MARKER  2026-02-03 10:48      op
                     <div class="form-group">
                         <label for="code-lang">Language:</label>
                         <select id="code-lang">
-                            <option value="rust">Rust</option>
-                            <option value="python">Python</option>
                             <option value="c">C</option>
+                            <option value="cpp">C++</option>
+                            <option value="rust">Rust</option>
                             <option value="go">Go</option>
                             <option value="csharp">C#</option>
-                            <option value="javascript">JavaScript</option>
-                            <option value="powershell">PowerShell</option>
                             <option value="java">Java</option>
                         </select>
                     </div>

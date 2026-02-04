@@ -3,7 +3,7 @@ use redbreadcrumb::{
     cli::{Cli, Commands, Language},
     codegen::{
         CCodeGenerator, CSharpCodeGenerator, CodeGenerator, GoCodeGenerator, JavaCodeGenerator,
-        JavaScriptCodeGenerator, PowerShellCodeGenerator, PythonCodeGenerator, RustCodeGenerator,
+        RustCodeGenerator,
     },
     generator::StringGenerator,
     patcher::BinaryPatcher,
@@ -166,12 +166,9 @@ fn generate_code(string: &str, language: Language) -> String {
     match language {
         Language::C => CCodeGenerator::new(false).generate(string),
         Language::Cpp => CCodeGenerator::new(true).generate(string),
-        Language::Python => PythonCodeGenerator.generate(string),
         Language::Go => GoCodeGenerator.generate(string),
         Language::Rust => RustCodeGenerator.generate(string),
         Language::Csharp => CSharpCodeGenerator.generate(string),
-        Language::Javascript => JavaScriptCodeGenerator.generate(string),
-        Language::Powershell => PowerShellCodeGenerator.generate(string),
         Language::Java => JavaCodeGenerator.generate(string),
     }
 }

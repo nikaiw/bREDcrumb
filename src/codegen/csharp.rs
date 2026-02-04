@@ -7,16 +7,30 @@ impl CodeGenerator for CSharpCodeGenerator {
     fn generate(&self, string: &str) -> String {
         let mut code = String::new();
 
-        writeln!(code, "// Tracking string: {}", string).unwrap();
+        writeln!(code, "// Tracking string - DO NOT REMOVE").unwrap();
+        writeln!(
+            code,
+            "// This string is used for binary attribution/tracking"
+        )
+        .unwrap();
+        writeln!(code).unwrap();
+        writeln!(code, "using System.Runtime.CompilerServices;").unwrap();
+        writeln!(code).unwrap();
         writeln!(code, "public static class TrackingString").unwrap();
         writeln!(code, "{{").unwrap();
         writeln!(
             code,
-            "    public const string Value = \"{}\";",
+            "    public static readonly string Value = \"{}\";",
             escape_csharp_string(string)
         )
         .unwrap();
-        writeln!(code, "    public const int Length = {};", string.len()).unwrap();
+        writeln!(code).unwrap();
+        writeln!(code, "    // Static constructor ensures the string is kept").unwrap();
+        writeln!(code, "    [MethodImpl(MethodImplOptions.NoInlining)]").unwrap();
+        writeln!(code, "    static TrackingString()").unwrap();
+        writeln!(code, "    {{").unwrap();
+        writeln!(code, "        _ = Value.Length;").unwrap();
+        writeln!(code, "    }}").unwrap();
         writeln!(code, "}}").unwrap();
 
         code

@@ -114,12 +114,9 @@ pub enum Commands {
 pub enum Language {
     C,
     Cpp,
-    Python,
     Go,
     Rust,
     Csharp,
-    Javascript,
-    Powershell,
     Java,
 }
 
@@ -128,12 +125,9 @@ impl std::fmt::Display for Language {
         match self {
             Language::C => write!(f, "c"),
             Language::Cpp => write!(f, "cpp"),
-            Language::Python => write!(f, "python"),
             Language::Go => write!(f, "go"),
             Language::Rust => write!(f, "rust"),
             Language::Csharp => write!(f, "csharp"),
-            Language::Javascript => write!(f, "javascript"),
-            Language::Powershell => write!(f, "powershell"),
             Language::Java => write!(f, "java"),
         }
     }
@@ -241,11 +235,10 @@ mod tests {
 
     #[test]
     fn test_code_with_language() {
-        let cli =
-            Cli::try_parse_from(["redbreadcrumb", "code", "TEST123", "-l", "python"]).unwrap();
+        let cli = Cli::try_parse_from(["redbreadcrumb", "code", "TEST123", "-l", "rust"]).unwrap();
         match cli.command {
             Commands::Code { language, .. } => {
-                assert!(matches!(language, Language::Python));
+                assert!(matches!(language, Language::Rust));
             }
             _ => panic!("Expected Code command"),
         }
@@ -331,17 +324,7 @@ mod tests {
 
     #[test]
     fn test_all_languages() {
-        for lang in [
-            "c",
-            "cpp",
-            "python",
-            "go",
-            "rust",
-            "csharp",
-            "javascript",
-            "powershell",
-            "java",
-        ] {
+        for lang in ["c", "cpp", "go", "rust", "csharp", "java"] {
             let cli = Cli::try_parse_from(["redbreadcrumb", "code", "TEST", "-l", lang]).unwrap();
             match cli.command {
                 Commands::Code { .. } => {}
@@ -373,7 +356,7 @@ mod tests {
     fn test_language_display() {
         assert_eq!(format!("{}", Language::C), "c");
         assert_eq!(format!("{}", Language::Cpp), "cpp");
-        assert_eq!(format!("{}", Language::Python), "python");
+        assert_eq!(format!("{}", Language::Rust), "rust");
     }
 
     #[test]

@@ -78,39 +78,83 @@ const fallback = {
 
     generateCode(str, lang) {
         const templates = {
-            rust: `// Tracking string: ${str}
-const TRACKING_STRING: &str = "${str}";
-const TRACKING_STRING_LEN: usize = ${str.length};`,
-            python: `# Tracking string: ${str}
-TRACKING_STRING = "${str}"
-TRACKING_STRING_LEN = ${str.length}`,
-            c: `/* Tracking string: ${str} */
-static const char tracking_string[] = "${str}";
-#define TRACKING_STRING_LEN ${str.length}`,
+            c: `#include <stdio.h>
+
+/* Tracking string - DO NOT REMOVE */
+/* This string is used for binary attribution/tracking */
+
+static volatile const char TRACKING_STRING[] = "${str}";
+
+/* Call this function once at startup to ensure the string is kept */
+__attribute__((constructor, used))
+static void _tracking_init(void) {
+    volatile const char* p = TRACKING_STRING;
+    (void)p;
+}`,
+            cpp: `#include <cstdio>
+
+// Tracking string - DO NOT REMOVE
+// This string is used for binary attribution/tracking
+
+static volatile const char TRACKING_STRING[] = "${str}";
+
+// Call this function once at startup to ensure the string is kept
+__attribute__((constructor, used))
+static void _tracking_init() {
+    volatile const char* p = TRACKING_STRING;
+    (void)p;
+}`,
+            rust: `// Tracking string - DO NOT REMOVE
+// This string is used for binary attribution/tracking
+
+#[used]
+#[no_mangle]
+static TRACKING_STRING: &[u8] = b"${str}";
+
+// Ensure the string is not optimized away
+#[inline(never)]
+fn _tracking_init() {
+    let _ = unsafe { std::ptr::read_volatile(&TRACKING_STRING) };
+}`,
             go: `package main
 
-// Tracking string: ${str}
-const TrackingString = "${str}"
-const TrackingStringLen = ${str.length}`,
-            csharp: `// Tracking string: ${str}
+// Tracking string - DO NOT REMOVE
+// This string is used for binary attribution/tracking
+
+//go:noinline
+var trackingString = "${str}"
+
+// init() ensures the string is kept in the binary
+func init() {
+	_ = trackingString
+}`,
+            csharp: `// Tracking string - DO NOT REMOVE
+// This string is used for binary attribution/tracking
+
+using System.Runtime.CompilerServices;
+
 public static class TrackingString
 {
-    public const string Value = "${str}";
-    public const int Length = ${str.length};
-}`,
-            javascript: `// Tracking string: ${str}
-const TRACKING_STRING = "${str}";
-const TRACKING_STRING_LEN = ${str.length};
+    public static readonly string Value = "${str}";
 
-// For ES6 modules:
-// export { TRACKING_STRING, TRACKING_STRING_LEN };`,
-            powershell: `# Tracking string: ${str}
-$TrackingString = "${str}"
-$TrackingStringLen = ${str.length}`,
-            java: `// Tracking string: ${str}
+    // Static constructor ensures the string is kept
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    static TrackingString()
+    {
+        _ = Value.Length;
+    }
+}`,
+            java: `// Tracking string - DO NOT REMOVE
+// This string is used for binary attribution/tracking
+
 public class TrackingString {
-    public static final String TRACKING_STRING = "${str}";
-    public static final int TRACKING_STRING_LEN = ${str.length};
+    public static final String VALUE = "${str}";
+
+    // Static block ensures the string is kept in the class file
+    static {
+        @SuppressWarnings("unused")
+        int len = VALUE.length();
+    }
 }`
         };
         return templates[lang] || templates.c;

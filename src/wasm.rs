@@ -8,7 +8,7 @@ use wasm_bindgen::prelude::*;
 
 use crate::codegen::{
     CCodeGenerator, CSharpCodeGenerator, CodeGenerator, GoCodeGenerator, JavaCodeGenerator,
-    JavaScriptCodeGenerator, PowerShellCodeGenerator, PythonCodeGenerator, RustCodeGenerator,
+    RustCodeGenerator,
 };
 use crate::generator::StringGenerator;
 use crate::patcher::{BinaryPatcher, PatchStrategy};
@@ -47,12 +47,9 @@ pub fn generate_code(tracking_string: &str, language: &str) -> Result<String, Js
     let code = match language.to_lowercase().as_str() {
         "c" => CCodeGenerator::new(false).generate(tracking_string),
         "cpp" | "c++" => CCodeGenerator::new(true).generate(tracking_string),
-        "python" | "py" => PythonCodeGenerator.generate(tracking_string),
         "go" | "golang" => GoCodeGenerator.generate(tracking_string),
         "rust" | "rs" => RustCodeGenerator.generate(tracking_string),
         "csharp" | "c#" | "cs" => CSharpCodeGenerator.generate(tracking_string),
-        "javascript" | "js" => JavaScriptCodeGenerator.generate(tracking_string),
-        "powershell" | "ps1" | "ps" => PowerShellCodeGenerator.generate(tracking_string),
         "java" => JavaCodeGenerator.generate(tracking_string),
         _ => {
             return Err(JsValue::from_str(&format!(
@@ -109,12 +106,9 @@ pub fn get_supported_languages() -> Vec<JsValue> {
     vec![
         JsValue::from_str("c"),
         JsValue::from_str("cpp"),
-        JsValue::from_str("python"),
         JsValue::from_str("go"),
         JsValue::from_str("rust"),
         JsValue::from_str("csharp"),
-        JsValue::from_str("javascript"),
-        JsValue::from_str("powershell"),
         JsValue::from_str("java"),
     ]
 }

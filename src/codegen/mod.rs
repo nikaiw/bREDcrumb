@@ -2,18 +2,12 @@ pub mod c_cpp;
 pub mod csharp;
 pub mod go;
 pub mod java;
-pub mod javascript;
-pub mod powershell;
-pub mod python;
 pub mod rust;
 
 pub use c_cpp::CCodeGenerator;
 pub use csharp::CSharpCodeGenerator;
 pub use go::GoCodeGenerator;
 pub use java::JavaCodeGenerator;
-pub use javascript::JavaScriptCodeGenerator;
-pub use powershell::PowerShellCodeGenerator;
-pub use python::PythonCodeGenerator;
 pub use rust::RustCodeGenerator;
 
 pub trait CodeGenerator {
@@ -29,20 +23,13 @@ mod tests {
         let gen = CCodeGenerator::new(false);
         let code = gen.generate("TEST123");
         assert!(code.contains("TEST123"));
-        assert!(code.contains("tracking_string"));
+        assert!(code.contains("TRACKING_STRING"));
     }
 
     #[test]
     fn test_cpp_generator() {
         let gen = CCodeGenerator::new(true);
         let code = gen.generate("TEST123");
-        assert!(code.contains("TEST123"));
-        assert!(code.contains("std::string") || code.contains("constexpr"));
-    }
-
-    #[test]
-    fn test_python_generator() {
-        let code = PythonCodeGenerator.generate("TEST123");
         assert!(code.contains("TEST123"));
         assert!(code.contains("TRACKING_STRING"));
     }
@@ -51,7 +38,7 @@ mod tests {
     fn test_go_generator() {
         let code = GoCodeGenerator.generate("TEST123");
         assert!(code.contains("TEST123"));
-        assert!(code.contains("TrackingString"));
+        assert!(code.contains("trackingString"));
     }
 
     #[test]
@@ -69,24 +56,10 @@ mod tests {
     }
 
     #[test]
-    fn test_javascript_generator() {
-        let code = JavaScriptCodeGenerator.generate("TEST123");
-        assert!(code.contains("TEST123"));
-        assert!(code.contains("TRACKING_STRING") || code.contains("trackingString"));
-    }
-
-    #[test]
-    fn test_powershell_generator() {
-        let code = PowerShellCodeGenerator.generate("TEST123");
-        assert!(code.contains("TEST123"));
-        assert!(code.contains("TrackingString"));
-    }
-
-    #[test]
     fn test_java_generator() {
         let code = JavaCodeGenerator.generate("TEST123");
         assert!(code.contains("TEST123"));
-        assert!(code.contains("TRACKING_STRING"));
+        assert!(code.contains("TrackingString"));
     }
 
     #[test]
@@ -97,20 +70,20 @@ mod tests {
 
     #[test]
     fn test_escaping_backslash() {
-        let code = PythonCodeGenerator.generate("test\\path");
+        let code = RustCodeGenerator.generate("test\\path");
         assert!(code.contains("\\\\") || code.contains("test\\path"));
     }
 
     #[test]
     fn test_empty_string() {
         let code = CCodeGenerator::new(false).generate("");
-        assert!(code.contains("tracking_string"));
+        assert!(code.contains("TRACKING_STRING"));
     }
 
     #[test]
     fn test_special_chars() {
         let code = GoCodeGenerator.generate("test\n\t\r");
-        assert!(code.contains("TrackingString"));
+        assert!(code.contains("trackingString"));
     }
 
     #[test]
@@ -123,7 +96,7 @@ mod tests {
     fn test_long_string() {
         let long_str = "A".repeat(1000);
         let code = JavaCodeGenerator.generate(&long_str);
-        assert!(code.contains("TRACKING_STRING"));
+        assert!(code.contains("TrackingString"));
     }
 
     #[test]
@@ -131,12 +104,9 @@ mod tests {
         let generators: Vec<Box<dyn CodeGenerator>> = vec![
             Box::new(CCodeGenerator::new(false)),
             Box::new(CCodeGenerator::new(true)),
-            Box::new(PythonCodeGenerator),
             Box::new(GoCodeGenerator),
             Box::new(RustCodeGenerator),
             Box::new(CSharpCodeGenerator),
-            Box::new(JavaScriptCodeGenerator),
-            Box::new(PowerShellCodeGenerator),
             Box::new(JavaCodeGenerator),
         ];
 

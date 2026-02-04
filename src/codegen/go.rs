@@ -9,14 +9,25 @@ impl CodeGenerator for GoCodeGenerator {
 
         writeln!(code, "package main").unwrap();
         writeln!(code).unwrap();
-        writeln!(code, "// Tracking string: {}", string).unwrap();
+        writeln!(code, "// Tracking string - DO NOT REMOVE").unwrap();
         writeln!(
             code,
-            "const TrackingString = \"{}\"",
+            "// This string is used for binary attribution/tracking"
+        )
+        .unwrap();
+        writeln!(code).unwrap();
+        writeln!(code, "//go:noinline").unwrap();
+        writeln!(
+            code,
+            "var trackingString = \"{}\"",
             escape_go_string(string)
         )
         .unwrap();
-        writeln!(code, "const TrackingStringLen = {}", string.len()).unwrap();
+        writeln!(code).unwrap();
+        writeln!(code, "// init() ensures the string is kept in the binary").unwrap();
+        writeln!(code, "func init() {{").unwrap();
+        writeln!(code, "\t_ = trackingString").unwrap();
+        writeln!(code, "}}").unwrap();
 
         code
     }
