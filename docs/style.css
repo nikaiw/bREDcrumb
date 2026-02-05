@@ -443,6 +443,19 @@ code {
     margin-right: 8px;
 }
 
+.form-group-inline {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group-inline .checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 15px;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
 .form-row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

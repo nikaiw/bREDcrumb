@@ -223,6 +223,7 @@ ac288ebe-a192-4481-a03b-147a2e1f59ce  MY_CUSTOM_MARKER  2026-02-03 10:48      op
             <p class="demo-subtitle">Try bREDcrumb directly in your browser using WebAssembly</p>
 
             <div class="demo-container">
+                <!-- 1. Generate tracking string -->
                 <div class="demo-panel">
                     <h3>String Generator</h3>
                     <div class="form-group">
@@ -240,52 +241,58 @@ ac288ebe-a192-4481-a03b-147a2e1f59ce  MY_CUSTOM_MARKER  2026-02-03 10:48      op
                     </div>
                 </div>
 
+                <!-- 2. Inject into existing binary -->
                 <div class="demo-panel">
+                    <h3>Binary Patcher</h3>
+                    <div class="form-group">
+                        <label for="patch-file">Binary File:</label>
+                        <input type="file" id="patch-file" accept=".exe,.dll,.so,.dylib,.macho,*">
+                    </div>
+                    <div class="form-group">
+                        <label for="patch-string">Tracking String:</label>
+                        <input type="text" id="patch-string" placeholder="Enter tracking string">
+                    </div>
+                    <div class="form-group">
+                        <label for="patch-strategy">Strategy:</label>
+                        <select id="patch-strategy">
+                            <option value="cave">Cave (use slack space)</option>
+                            <option value="section">Section (add new section)</option>
+                            <option value="extend">Extend (extend last section)</option>
+                            <option value="overlay">Overlay (append after EOF)</option>
+                        </select>
+                    </div>
+                    <button id="btn-patch" class="btn btn-primary">Patch Binary</button>
+                    <div class="output" id="patch-output"></div>
+                </div>
+
+                <!-- 3. Generate YARA detection rule -->
+                <div class="demo-panel demo-panel-wide">
                     <h3>YARA Generator</h3>
-                    <div class="form-group">
-                        <label for="yara-string">String:</label>
-                        <input type="text" id="yara-string" placeholder="Enter tracking string">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="yara-string">Tracking String:</label>
+                            <input type="text" id="yara-string" placeholder="Enter tracking string">
+                        </div>
+                        <div class="form-group form-group-inline">
+                            <label>Modifiers:</label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="yara-ascii" checked> ASCII
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="yara-wide"> Wide
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <button id="btn-yara" class="btn btn-primary">Generate YARA</button>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="yara-ascii" checked> ASCII
-                        </label>
-                        <label>
-                            <input type="checkbox" id="yara-wide"> Wide
-                        </label>
-                    </div>
-                    <button id="btn-yara" class="btn btn-primary">Generate YARA</button>
                     <div class="output-wrapper">
                         <button class="btn-copy" data-target="yara-output" title="Copy to clipboard">📋</button>
                         <pre class="output" id="yara-output"><code></code></pre>
                     </div>
                 </div>
 
-                <div class="demo-panel demo-panel-wide">
-                    <h3>Binary Patcher</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="patch-file">Binary File:</label>
-                            <input type="file" id="patch-file" accept=".exe,.dll,.so,.dylib,.macho,*">
-                        </div>
-                        <div class="form-group">
-                            <label for="patch-string">Tracking String:</label>
-                            <input type="text" id="patch-string" placeholder="Enter tracking string">
-                        </div>
-                        <div class="form-group">
-                            <label for="patch-strategy">Strategy:</label>
-                            <select id="patch-strategy">
-                                <option value="cave">Cave (use slack space)</option>
-                                <option value="section">Section (add new section)</option>
-                                <option value="extend">Extend (extend last section)</option>
-                                <option value="overlay">Overlay (append after EOF)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button id="btn-patch" class="btn btn-primary">Patch Binary</button>
-                    <div class="output" id="patch-output"></div>
-                </div>
-
+                <!-- 4. Embed in source code -->
                 <p class="demo-intro">
                     When you control the source code, embed the tracking string directly.
                     The generated code includes <strong>DCE prevention</strong> techniques
@@ -296,7 +303,7 @@ ac288ebe-a192-4481-a03b-147a2e1f59ce  MY_CUSTOM_MARKER  2026-02-03 10:48      op
                     <h3>Code Generator</h3>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="code-string">String:</label>
+                            <label for="code-string">Tracking String:</label>
                             <input type="text" id="code-string" placeholder="Enter tracking string">
                         </div>
                         <div class="form-group">
