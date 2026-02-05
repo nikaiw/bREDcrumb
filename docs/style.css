@@ -472,6 +472,68 @@ pre.output {
     overflow-y: auto;
 }
 
+/* Output wrapper for copy button */
+.output-wrapper {
+    position: relative;
+    margin-top: 15px;
+}
+
+.output-wrapper .output {
+    margin-top: 0;
+}
+
+.btn-copy {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s, background 0.2s;
+    font-size: 0.9rem;
+    z-index: 10;
+    color: var(--text-primary);
+}
+
+.btn-copy:hover {
+    opacity: 1;
+    background: var(--bg-secondary);
+}
+
+.btn-copy.copied {
+    color: var(--accent-secondary);
+    opacity: 1;
+}
+
+/* Demo intro text */
+.demo-intro {
+    grid-column: 1 / -1;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: -10px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.demo-intro strong {
+    color: var(--accent);
+}
+
+/* Prism.js integration */
+#code-output {
+    background: var(--code-bg);
+}
+
+#code-output code {
+    background: transparent;
+    padding: 0;
+    font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+    font-size: 0.85rem;
+}
+
 .wasm-status {
     text-align: center;
     padding: 20px;

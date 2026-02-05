@@ -65,6 +65,30 @@ function callWasm(fn, ...args) {
     }
 }
 
+// Copy to clipboard functionality
+function copyToClipboard(targetId) {
+    const el = document.getElementById(targetId);
+    const text = el.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector(`[data-target="${targetId}"]`);
+        btn.classList.add('copied');
+        btn.textContent = '✓';
+        setTimeout(() => {
+            btn.classList.remove('copied');
+            btn.textContent = '📋';
+        }, 2000);
+    }).catch(err => {
+        console.error('Copy failed:', err);
+    });
+}
+
+// Set up copy button event listeners
+document.querySelectorAll('.btn-copy').forEach(btn => {
+    btn.addEventListener('click', () => {
+        copyToClipboard(btn.dataset.target);
+    });
+});
+
 // Fallback implementations (when WASM is not available)
 const fallback = {
     generateString(length, prefix) {
@@ -222,8 +246,11 @@ document.getElementById('btn-generate').addEventListener('click', () => {
 
 document.getElementById('btn-code').addEventListener('click', () => {
     const str = document.getElementById('code-string').value;
+    const codeEl = document.querySelector('#code-output code');
+
     if (!str) {
-        document.getElementById('code-output').textContent = 'Please enter a tracking string';
+        codeEl.textContent = 'Please enter a tracking string';
+        codeEl.className = '';
         return;
     }
 
@@ -244,7 +271,15 @@ document.getElementById('btn-code').addEventListener('click', () => {
         result = fallback.generateCode(str, lang);
     }
 
-    document.getElementById('code-output').textContent = result;
+    // Map language to Prism class
+    const langMap = { c: 'c', cpp: 'cpp', rust: 'rust', go: 'go', csharp: 'csharp', java: 'java' };
+    codeEl.className = `language-${langMap[lang] || 'c'}`;
+    codeEl.textContent = result;
+
+    // Apply syntax highlighting
+    if (typeof Prism !== 'undefined') {
+        Prism.highlightElement(codeEl);
+    }
 });
 
 document.getElementById('btn-yara').addEventListener('click', () => {

@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>bREDcrumb - Binary Tracking String Toolkit</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Prism.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 </head>
 <body>
     <nav class="navbar">
@@ -232,7 +234,10 @@ ac288ebe-a192-4481-a03b-147a2e1f59ce  MY_CUSTOM_MARKER  2026-02-03 10:48      op
                         <input type="text" id="gen-prefix" value="RT" maxlength="8">
                     </div>
                     <button id="btn-generate" class="btn btn-primary">Generate</button>
-                    <div class="output" id="gen-output"></div>
+                    <div class="output-wrapper">
+                        <button class="btn-copy" data-target="gen-output" title="Copy to clipboard">📋</button>
+                        <div class="output" id="gen-output"></div>
+                    </div>
                 </div>
 
                 <div class="demo-panel">
@@ -250,7 +255,10 @@ ac288ebe-a192-4481-a03b-147a2e1f59ce  MY_CUSTOM_MARKER  2026-02-03 10:48      op
                         </label>
                     </div>
                     <button id="btn-yara" class="btn btn-primary">Generate YARA</button>
-                    <pre class="output" id="yara-output"></pre>
+                    <div class="output-wrapper">
+                        <button class="btn-copy" data-target="yara-output" title="Copy to clipboard">📋</button>
+                        <pre class="output" id="yara-output"></pre>
+                    </div>
                 </div>
 
                 <div class="demo-panel demo-panel-wide">
@@ -278,6 +286,12 @@ ac288ebe-a192-4481-a03b-147a2e1f59ce  MY_CUSTOM_MARKER  2026-02-03 10:48      op
                     <div class="output" id="patch-output"></div>
                 </div>
 
+                <p class="demo-intro">
+                    When you control the source code, embed the tracking string directly.
+                    The generated code includes <strong>DCE prevention</strong> techniques
+                    to ensure the string survives compiler optimization.
+                </p>
+
                 <div class="demo-panel demo-panel-wide">
                     <h3>Code Generator</h3>
                     <div class="form-row">
@@ -300,7 +314,10 @@ ac288ebe-a192-4481-a03b-147a2e1f59ce  MY_CUSTOM_MARKER  2026-02-03 10:48      op
                             <button id="btn-code" class="btn btn-primary">Generate Code</button>
                         </div>
                     </div>
-                    <pre class="output" id="code-output"></pre>
+                    <div class="output-wrapper">
+                        <button class="btn-copy" data-target="code-output" title="Copy to clipboard">📋</button>
+                        <pre class="output" id="code-output"><code></code></pre>
+                    </div>
                 </div>
             </div>
 
@@ -315,6 +332,13 @@ ac288ebe-a192-4481-a03b-147a2e1f59ce  MY_CUSTOM_MARKER  2026-02-03 10:48      op
         </div>
     </footer>
 
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-rust.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
     <script type="module" src="app.js"></script>
 </body>
 </html>
