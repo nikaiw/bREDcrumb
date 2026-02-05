@@ -284,8 +284,11 @@ document.getElementById('btn-code').addEventListener('click', () => {
 
 document.getElementById('btn-yara').addEventListener('click', () => {
     const str = document.getElementById('yara-string').value;
+    const codeEl = document.querySelector('#yara-output code');
+
     if (!str) {
-        document.getElementById('yara-output').textContent = 'Please enter a tracking string';
+        codeEl.textContent = 'Please enter a tracking string';
+        codeEl.className = '';
         return;
     }
 
@@ -307,7 +310,13 @@ document.getElementById('btn-yara').addEventListener('click', () => {
         result = fallback.generateYara(str, ascii, wide);
     }
 
-    document.getElementById('yara-output').textContent = result;
+    // Use C-like highlighting for YARA (similar syntax)
+    codeEl.className = 'language-c';
+    codeEl.textContent = result;
+
+    if (typeof Prism !== 'undefined') {
+        Prism.highlightElement(codeEl);
+    }
 });
 
 document.getElementById('btn-patch').addEventListener('click', async () => {
